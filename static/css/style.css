@@ -1,0 +1,98 @@
+:root {
+    --bs-app-primary: #1230AE;
+    --bs-primary-rgb: 18, 48, 174;
+    --bs-secondary: #6C48C5; 
+    --bs-light-rgb: 248, 249, 255; 
+    --bs-dark: #343a40;
+  }
+
+
+* {
+    font-family: "Space Grotesk", serif;
+    font-optical-sizing: auto;
+}
+
+.app-container .app-container-background {
+    min-height: 400px;
+}
+
+.section-heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--bs-app-primary);
+}
+.fund-list .fund-item {
+    background-color: var(--bs-secondary);
+    padding: 16px 25px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+}
+.app-content, .fund-source, .overview, .financial-trend {
+    padding: 32px;
+    border-radius: 30px;
+
+}
+
+.fund-source, .overview, .financial-trend {
+    background-color: #fff;
+}
+
+
+.overview-item {
+    padding: 10px 20px;
+    border: 1px solid var(--bs-app-primary);
+    background-color: transparent;
+    border-radius: 10px;
+    color: var(--bs-app-primary);
+    font-weight: bold;
+}
+
+.overview-item.active {
+    background-color: var(--bs-app-primary);
+    color: #fff;
+}
+
+.overview-item .heading {
+    font-size: 18px;
+}
+
+.overview-item .amount {
+    font-size: 22px;
+    margin-top: 5px;
+}
+
+.category-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #445ec7;
+}
+.category-icon.cat1{
+    background-color: var(--bs-app-primary);
+}
+.category-icon.cat2{
+    background-color: var(--bs-secondary);
+}
+.category-icon.cat3{
+    background-color: #C68FE6;
+}
+.category-icon.cat4{
+    background-color: #3E97FF;
+}
+
+.alert {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    border-radius: 0;
+    top: 0;
+    transition: opacity 0.5s ease;
+}
+
+.navbar-nav .nav-link.active {
+    color: var(--bs-app-primary);
+}

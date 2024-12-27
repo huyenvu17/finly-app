@@ -1,0 +1,204 @@
+{% extends 'layout.html'%}
+{% block content %}
+<div class="app-container">
+    <div class="bg-primary position-relative app-container-background">
+        <div class="position-absolute right-0 left-0 w-100 mt-5">
+            <div class="container app-user-info">
+                <div class="row">
+                    <div class="col-6 text-white">
+                        <h5>Xin chào,</h5>
+                        <h2>{{ current_user.hoten }}</h2>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-primary bg-white text-primary fw-bold"  data-bs-toggle="modal" data-bs-target="#newTransaction"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE"/>
+                            </svg>
+                            Thêm giao dịch</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container bg-light app-content mt-3">
+              <div class="row">
+                  <div class="col-12">
+                      <!-- Bộ lọc và tìm kiếm -->
+                      <form method="GET" action="{{ url_for('transactions') }}" class="mb-4">
+                          <div class="row">
+                              <!-- Ô tìm kiếm -->
+                              <div class="col-md-4">
+                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ search_query }}">
+                            </div>
+                              <!-- Lọc danh mục -->
+                              <div class="col-md-3">
+                                  <select name="category" class="form-select">
+                                      <option value="">Chọn danh mục</option>
+                                      {% for category in categories %}
+                                          <option value="{{ category[0] }}" {% if request.args.get('category') == category[0]|string %}selected{% endif %}>
+                                              {{ category[1] }}
+                                          </option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                              <!-- Lọc loại giao dịch -->
+                              <div class="col-md-3">
+                                  <select name="type" class="form-select">
+                                      <option value="">Chọn loại</option>
+                                      <option value="expense" {% if transaction_type == 'expense' %}selected{% endif %}>Chi tiêu</option>
+                                      <option value="income" {% if transaction_type == 'income' %}selected{% endif %}>Thu nhập</option>
+                                  </select>
+                              </div>
+                              
+                              <div class="col-md-2">
+                                  <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                              </div>
+                          </div>
+                      </form>
+                      <!-- Bảng giao dịch -->
+                      <table class="table">
+                          <thead class="table-light">
+                              <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Danh mục</th>
+                                  <th scope="col">Loại</th>
+                                  <th scope="col">Số tiền</th>
+                                  <th scope="col">Ngày</th>
+                                  <th scope="col">Ghi chú</th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {% for transaction in transactions %}
+                                  <tr>
+                                      <th scope="row">{{ transaction[0] }}</th>
+                                      <td>{{ transaction[1] }}</td>
+                                      <td>
+                                        {% if transaction[2] == 'expense' %}
+                                            <span class="badge text-bg-primary">Chi tiêu</span>
+                                        {% else %}
+                                            <span class="badge text-bg-info">Thu nhập</span>
+                                        {% endif %}
+                                      </td>
+                                      <td>{{ transaction[3] }}</td>
+                                      <td>{{ transaction[4] }}</td>
+                                      <td>{{ transaction[5] }}</td>
+                                      <td>
+                                          <a href="" class="btn btn-primary btn-sm">Sửa</a>
+                                          <a href="" class="btn btn-danger btn-sm">Xóa</a>
+                                      </td>
+                                  </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                      <nav>
+                          <ul class="pagination justify-content-center">
+                              {% for page in range(1, total_pages + 1) %}
+                                  <li class="page-item {% if page == current_page %}active{% endif %}">
+                                      <a class="page-link" href="{{ url_for('transactions', page=page, category=request.args.get('category'), type=request.args.get('type'), search=request.args.get('search')) }}">
+                                          {{ page }}
+                                      </a>
+                                  </li>
+                              {% endfor %}
+                          </ul>
+                      </nav>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="newTransactionLabel">Ghi Chép Giao Dịch</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Chi Tiêu</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Thu Nhập</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+                        <div class="mb-3">
+                          <label for="spendAmount" class="form-label">Số tiền</label>
+                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Danh Mục</label>
+                          <select class="form-select" name="category" required>
+                            <option selected disabled value="">Chọn danh mục</option>
+                            {% for category in expense_categories %}
+                                <option value="{{ category[0] }}">{{ category[1] }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="spendDate" class="form-label">Ngày</label>
+                            <input type="date" class="form-control" id="spendDate" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nguồn tiền</label>
+                            <select class="form-select" name="source" required>
+                                <option selected disabled value="">Chọn nguồn tiền</option>
+                                {% for source in sources %}
+                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="spendNote" class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+                        </div>
+                        <input type="hidden" name="type" value="expense">
+                        <button type="submit" class="btn btn-primary">Thêm giao dịch chi</button>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+                        <div class="mb-3">
+                          <label for="spendAmount" class="form-label">Số tiền</label>
+                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Thống Kê Giao Dịch</label>
+                          <select class="form-select" name="category" required>
+                            <option selected disabled value="">Chọn danh mục</option>
+                            {% for category in income_categories %}
+                                <option value="{{ category[0] }}">{{ category[1] }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="spendDate" class="form-label">Ngày</label>
+                            <input type="date" class="form-control" id="spendDate" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nguồn tiền</label>
+                            <select class="form-select" name="source" required>
+                                <option selected disabled value="">Chọn nguồn tiền</option>
+                                {% for source in sources %}
+                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="spendNote" class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+                        </div>
+                        <input type="hidden" name="type" value="income">
+                        <button type="submit" class="btn btn-primary">Thêm giao dịch thu</button>
+                    </form>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock%}
