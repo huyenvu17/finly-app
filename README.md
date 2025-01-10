@@ -2,46 +2,47 @@
 Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng quản lý việc thu chi và theo dõi xu hướng chi tiêu.
 
 ## Chức năng
-- Thêm giao dịch chi tiêu/thu nhập
-- Cập nhật giao dịch chi tiêu/thu nhập
-- Xóa giao dịch chi tiêu/thu nhập
-- Xem danh sách chi tiêu và thu nhập
-- Xem thống kê giao dịch theo phân loại
-- Xem thống kê xu hướng chi tiêu
+- Đăng ký/ Đăng nhập
+- Quản lý giao dịch chi tiêu/thu nhập (xem, thêm, xóa, sửa giao dịch)
+- Quản lý nguồn tiền (xem, thêm, xóa, sửa nguồn tiền)
+- Thống kê giao dịch theo phân loại
+- Thống kê xu hướng chi tiêu
+- Quản lý hồ sơ (Cập nhật hồ sơ, thay đổi mật khẩu)
+- Liên hệ
 
 ## Hướng dẫn cài đặt
 
-1. **Clone the repository:**
+1. **Tải source code từ github: **
     ```bash
-    git clone https://github.com/yourusername/finly-app.git
+    git clone https://github.com/huyenvu17/finly-app.git
     ```
 
-2. **Navigate to the project directory:**
+2. **Đi đến đường dẫn thư mục: **
     ```bash
     cd finly-app
     ```
 
-3. **Create a virtual environment:**
+3. **Tạo môi trường ảo: **
     ```bash
     python -m venv venv
     ```
 
-4. **Activate the virtual environment:**
-    - On Windows:
+4. **Kích hoạt môi trường ảo: **
+    - Trên Windows:
       ```bash
       venv\Scripts\activate
       ```
-    - On macOS/Linux:
+    - Trên macOS/Linux:
       ```bash
       source venv/bin/activate
       ```
 
-5. **Install the required dependencies:**
+5. **Tải các dependencies cần thiết được liệt kê trong requirements.txt:**
     ```bash
     pip install -r requirements.txt
     ```
 
-6. **Run the application:**
+6. **Khởi động ứng dụng:**
     ```bash
     python app.py
     ```
@@ -53,8 +54,8 @@ Lê Hàn Trúc Chi - 23210200
 
 
 ## Tài liệu tham khảo
-https://flask.palletsprojects.com/en/stable
-https://www.tutorialspoint.com/flask/index.htm
+- https://flask.palletsprojects.com/en/stable
+- https://www.tutorialspoint.com/flask/index.htm
 
 ## Quyền sử dụng
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

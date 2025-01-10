@@ -1,240 +1,299 @@
 {% extends 'layout.html'%}
 {% block content %}
 <div class="app-container">
-    <div class="bg-primary position-relative app-container-background">
-        <div class="position-absolute right-0 left-0 w-100 mt-5">
-            <div class="container app-user-info">
-                <div class="row">
-                    <div class="col-6 text-white">
-                        <h5>Xin chào,</h5>
-                        <h2>{{ current_user.hoten }}</h2>
-                    </div>
-                    <div class="col-6 text-end">
-                        <button type="button" class="btn btn-primary bg-white text-primary fw-bold"  data-bs-toggle="modal" data-bs-target="#newTransaction"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE"/>
-                            </svg>
-                            Thêm giao dịch</button>
-                    </div>
-                </div>
-            </div>
-            <div class="container bg-light app-content mt-3">
-                <div class="row">
-                    <div class="col-12 col-md-7">
-                        <div class="overview">
-                            <div class="row">
-                                <div class="col-8"><div class="section-heading">Tổng Quan</div></div>
-                                <div class="col-4 text-end"><div class="input-group">
-                                    <span class="input-group-text bg-transparent" id="basic-addon1"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16.125 14.565L13.7475 12.315C13.2955 12.897 12.7537 13.4033 12.1425 13.815L14.5875 16.14C14.6903 16.2601 14.8174 16.357 14.9604 16.4243C15.1035 16.4916 15.2591 16.5278 15.4172 16.5305C15.5753 16.5332 15.7321 16.5024 15.8773 16.44C16.0226 16.3776 16.1529 16.2851 16.2598 16.1687C16.3667 16.0522 16.4476 15.9144 16.4973 15.7643C16.5469 15.6142 16.5642 15.4553 16.5479 15.2981C16.5316 15.1408 16.4822 14.9888 16.4028 14.8521C16.3234 14.7154 16.216 14.5971 16.0875 14.505L16.125 14.565Z" fill="#D9D9D9"/>
-                                        <path d="M8.355 1.5C7.01998 1.5 5.71493 1.89588 4.6049 2.63758C3.49487 3.37928 2.6297 4.43349 2.11881 5.66689C1.60792 6.90029 1.47425 8.25749 1.7347 9.56686C1.99515 10.8762 2.63802 12.079 3.58203 13.023C4.52603 13.967 5.72877 14.6099 7.03814 14.8703C8.34751 15.1308 9.70471 14.9971 10.9381 14.4862C12.1715 13.9753 13.2257 13.1101 13.9674 12.0001C14.7091 10.8901 15.105 9.58502 15.105 8.25C15.105 6.45979 14.3938 4.7429 13.128 3.47703C11.8621 2.21116 10.1452 1.5 8.355 1.5ZM8.355 13.02C7.41339 13.02 6.4929 12.7409 5.70988 12.2179C4.92685 11.6949 4.31643 10.9516 3.95574 10.0818C3.59506 9.21196 3.50031 8.25477 3.68347 7.33114C3.86662 6.40751 4.31946 5.5589 4.98476 4.89255C5.65006 4.22621 6.49795 3.77203 7.42129 3.58743C8.34463 3.40282 9.30198 3.49606 10.1723 3.85537C11.0427 4.21469 11.787 4.82394 12.3112 5.60614C12.8354 6.38835 13.116 7.30839 13.1175 8.25C13.1195 8.87633 12.9977 9.49688 12.7591 10.076C12.5206 10.6551 12.17 11.1814 11.7275 11.6247C11.2849 12.0679 10.7592 12.4193 10.1804 12.6588C9.60169 12.8982 8.98133 13.021 8.355 13.02Z" fill="#D9D9D9"/>
-                                        </svg>
-                                        </span>
-                                    <input type="text" class="form-control border-start-0" placeholder="Tìm kiếm" aria-label="Username" aria-describedby="basic-addon1">
-                                  </div></div>
-                            </div>
-                            <div class="row mt-4" role="tablist">
-                                <div class="col-6" role="presentation">
-                                    <div class="overview-item active" data-bs-toggle="pill" data-bs-target="#pills-overview-expense" type="button" role="tab" aria-controls="pills-overview-expense" aria-selected="true">
-                                        <div class="heading">Chi tiêu <span><svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3.89239 15.4921C4.12978 15.3742 4.40426 15.3554 4.65552 15.4398C4.90679 15.5241 5.11427 15.7048 5.23239 15.9421C5.86532 17.2203 6.82848 18.3061 8.02211 19.0869C9.21573 19.8677 10.5964 20.3152 12.0211 20.383C13.4458 20.4509 14.8628 20.1366 16.1252 19.4727C17.3876 18.8088 18.4496 17.8195 19.2011 16.6072C19.9526 15.3949 20.3663 14.0037 20.3994 12.5778C20.4325 11.1518 20.0838 9.74297 19.3894 8.49711C18.6949 7.25124 17.68 6.2137 16.4498 5.49194C15.2196 4.77018 13.8187 4.39046 12.3924 4.3921C10.9013 4.38564 9.43854 4.79973 8.17208 5.58685C6.90562 6.37397 5.88674 7.50221 5.23239 8.8421C5.11304 9.08079 4.90376 9.2623 4.65059 9.34669C4.39741 9.43108 4.12108 9.41144 3.88239 9.2921C3.64369 9.17275 3.46219 8.96347 3.37779 8.71029C3.2934 8.45712 3.31304 8.18079 3.43239 7.9421C4.43578 5.92284 6.09215 4.30196 8.13267 3.34253C10.1732 2.3831 12.4781 2.14144 14.6732 2.65677C16.8683 3.17211 18.8249 4.41419 20.2253 6.18142C21.6257 7.94865 22.3877 10.1373 22.3877 12.3921C22.3877 14.6469 21.6257 16.8356 20.2253 18.6028C18.8249 20.37 16.8683 21.6121 14.6732 22.1274C12.478 22.6428 10.1732 22.4011 8.13266 21.4417C6.09215 20.4822 4.43578 18.8614 3.43239 16.8421C3.3728 16.7235 3.33742 16.5942 3.32833 16.4617C3.31923 16.3293 3.3366 16.1963 3.37942 16.0707C3.42223 15.945 3.48965 15.8291 3.57772 15.7298C3.66579 15.6305 3.77276 15.5497 3.89239 15.4921ZM3.39239 11.3921L12.9824 11.3921L10.6824 9.1021C10.5892 9.00886 10.5152 8.89817 10.4647 8.77635C10.4143 8.65453 10.3883 8.52396 10.3883 8.3921C10.3883 8.26024 10.4143 8.12967 10.4647 8.00785C10.5152 7.88603 10.5892 7.77534 10.6824 7.6821C10.7756 7.58886 10.8863 7.5149 11.0081 7.46444C11.13 7.41398 11.2605 7.38801 11.3924 7.38801C11.5242 7.38801 11.6548 7.41398 11.7766 7.46444C11.8985 7.5149 12.0092 7.58886 12.1024 7.6821L16.1024 11.6821C16.1934 11.7772 16.2648 11.8893 16.3124 12.0121C16.4124 12.2556 16.4124 12.5286 16.3124 12.7721C16.2648 12.8948 16.1934 13.007 16.1024 13.1021L12.1024 17.1021C12.0094 17.1958 11.8988 17.2702 11.777 17.321C11.6551 17.3718 11.5244 17.3979 11.3924 17.3979C11.2604 17.3979 11.1297 17.3718 11.0078 17.321C10.886 17.2702 10.7754 17.1958 10.6824 17.1021C10.5887 17.0091 10.5143 16.8985 10.4635 16.7767C10.4127 16.6548 10.3866 16.5241 10.3866 16.3921C10.3866 16.2601 10.4127 16.1294 10.4635 16.0075C10.5143 15.8857 10.5887 15.7751 10.6824 15.6821L12.9824 13.3921L3.39239 13.3921C3.12717 13.3921 2.87282 13.2867 2.68528 13.0992C2.49774 12.9117 2.39239 12.6573 2.39239 12.3921C2.39239 12.1269 2.49774 11.8725 2.68528 11.685C2.87282 11.4975 3.12717 11.3921 3.39239 11.3921Z" fill="#FF819F"/>
-                                            </svg>
-                                            </span></div>
-                                        <div class="amount">{{ total_expense | int | format_number }} vnđ</div>
-                                    </div>
-                                </div>
-                                <div class="col-6" role="presentation">
-                                    <div class="overview-item" data-bs-toggle="pill" data-bs-target="#pills-overview-income" type="button" role="tab" aria-controls="pills-overview-income" aria-selected="false">
-                                        <div class="heading">Thu nhập <span><svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3.89239 15.4921C4.12978 15.3742 4.40426 15.3554 4.65552 15.4398C4.90679 15.5241 5.11427 15.7048 5.23239 15.9421C5.86532 17.2203 6.82848 18.3061 8.02211 19.0869C9.21573 19.8677 10.5964 20.3152 12.0211 20.383C13.4458 20.4509 14.8628 20.1366 16.1252 19.4727C17.3876 18.8088 18.4496 17.8195 19.2011 16.6072C19.9526 15.3949 20.3663 14.0037 20.3994 12.5778C20.4325 11.1518 20.0838 9.74297 19.3894 8.49711C18.6949 7.25124 17.68 6.2137 16.4498 5.49194C15.2196 4.77018 13.8187 4.39046 12.3924 4.3921C10.9013 4.38564 9.43854 4.79973 8.17208 5.58685C6.90562 6.37397 5.88674 7.50221 5.23239 8.8421C5.11304 9.08079 4.90376 9.2623 4.65059 9.34669C4.39741 9.43108 4.12108 9.41144 3.88239 9.2921C3.64369 9.17275 3.46219 8.96347 3.37779 8.71029C3.2934 8.45712 3.31304 8.18079 3.43239 7.9421C4.43578 5.92284 6.09215 4.30196 8.13267 3.34253C10.1732 2.3831 12.4781 2.14144 14.6732 2.65677C16.8683 3.17211 18.8249 4.41419 20.2253 6.18142C21.6257 7.94865 22.3877 10.1373 22.3877 12.3921C22.3877 14.6469 21.6257 16.8356 20.2253 18.6028C18.8249 20.37 16.8683 21.6121 14.6732 22.1274C12.478 22.6428 10.1732 22.4011 8.13266 21.4417C6.09215 20.4822 4.43578 18.8614 3.43239 16.8421C3.3728 16.7235 3.33742 16.5942 3.32833 16.4617C3.31923 16.3293 3.3366 16.1963 3.37942 16.0707C3.42223 15.945 3.48965 15.8291 3.57772 15.7298C3.66579 15.6305 3.77276 15.5497 3.89239 15.4921ZM3.39239 11.3921L12.9824 11.3921L10.6824 9.1021C10.5892 9.00886 10.5152 8.89817 10.4647 8.77635C10.4143 8.65453 10.3883 8.52396 10.3883 8.3921C10.3883 8.26024 10.4143 8.12967 10.4647 8.00785C10.5152 7.88603 10.5892 7.77534 10.6824 7.6821C10.7756 7.58886 10.8863 7.5149 11.0081 7.46444C11.13 7.41398 11.2605 7.38801 11.3924 7.38801C11.5242 7.38801 11.6548 7.41398 11.7766 7.46444C11.8985 7.5149 12.0092 7.58886 12.1024 7.6821L16.1024 11.6821C16.1934 11.7772 16.2648 11.8893 16.3124 12.0121C16.4124 12.2556 16.4124 12.5286 16.3124 12.7721C16.2648 12.8948 16.1934 13.007 16.1024 13.1021L12.1024 17.1021C12.0094 17.1958 11.8988 17.2702 11.777 17.321C11.6551 17.3718 11.5244 17.3979 11.3924 17.3979C11.2604 17.3979 11.1297 17.3718 11.0078 17.321C10.886 17.2702 10.7754 17.1958 10.6824 17.1021C10.5887 17.0091 10.5143 16.8985 10.4635 16.7767C10.4127 16.6548 10.3866 16.5241 10.3866 16.3921C10.3866 16.2601 10.4127 16.1294 10.4635 16.0075C10.5143 15.8857 10.5887 15.7751 10.6824 15.6821L12.9824 13.3921L3.39239 13.3921C3.12717 13.3921 2.87282 13.2867 2.68528 13.0992C2.49774 12.9117 2.39239 12.6573 2.39239 12.3921C2.39239 12.1269 2.49774 11.8725 2.68528 11.685C2.87282 11.4975 3.12717 11.3921 3.39239 11.3921Z" fill="#FF819F"/>
-                                            </svg>
-                                            </span></div>
-                                        <div class="amount">{{ total_income | int | format_number }} vnđ</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-content" id="pills-tabContent">
-                              <div class="tab-pane fade show active" id="pills-overview-expense" role="tabpanel" aria-labelledby="pills-overview-expense-tab">
-                                <div class="row mt-5">
-                                  <div class="col-12">
-                                      <div id="expenseChart" class="d-flex justify-content-center">
-                                      </div>
-                                      
-                                  </div>
-                              </div>
-                              <div class="mt-4">
-                                  <div class="section-heading">Danh Mục</div>
-                                  <div class="category-summary">
-                                      {% for category, amount, type, id in category_stats %}
-                                        <div class="row category-row align-items-center mt-4">
-                                            <div class="col-8 category-name d-flex align-items-center">
-                                                <span class="category-icon cat{{ id }} me-2">
-                                                    {% if id == 1 %}
-                                                    <img src="{{ url_for('static', filename='images/electricity.svg') }}" alt="Điện - Nước - Gas">
-                                                    {% elif id == 2 %}
-                                                        <img src="{{ url_for('static', filename='images/food.svg') }}" alt="Ăn uống">
-                                                    {% elif id == 3 %}
-                                                        <img src="{{ url_for('static', filename='images/shopping.svg') }}" alt="Mua sắm">
-                                                    {% elif id == 4 %}
-                                                        <img src="{{ url_for('static', filename='images/entertainment.svg') }}" alt="Giải trí">
-                                                    {% else %}
-                                                        <img src="{{ url_for('static', filename='images/default-category.svg') }}" alt="{{ category }}">
-                                                    {% endif %}
-                                                </span>
-                                                <span>{{ category }}</span>
-                                            </div>
-                                            <div class="col-4 category-price text-end d-flex align-items-center justify-content-end">
-                                                <span>{{ amount | int | format_number }} vnđ</span>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                  </div>
-                              </div>
-                              </div>
-                              <div class="tab-pane fade" id="pills-overview-income" role="tabpanel" aria-labelledby="pills-overview-income-tab">
-                              </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <div class="financial-trend">
-                            <div class="section-heading">Xu Hướng Chi Tiêu</div>
-                            <div id="financialTrendChart">
-                            </div>
-                        </div>
-                        <div class="fund-source">
-                            <div class="row">
-                                <div class="col-10 section-heading">Nguồn Tiền</div>
-                                <div class="col-2 text-end"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V14M12 12L20 4M20 4V9M20 4H15" stroke="#1230AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    </div>
-                            </div>
-                            <div class="fund-list">
-                                <div class="fund-item">
-                                    <div class="row ">
-                                        <div class="col-8">
-                                            <span><img src="{{ url_for('static', filename='images/finly-white.svg') }}" alt="finly-white"></span>
-                                            <span>Ví Finly</span>
-                                        </div>
-                                        <div class="col-4 text-end">Mặc định</div>
-                                    </div>
-                                    <div class="row mt-4">
-                                        <div class="col-12 fw-bold">12.000.000đ</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="position-relative">
+    <div class="bg-primary app-container-background position-absolute right-0 left-0 w-100 "></div>
+    <div class="w-100 pt-5 z-3 position-relative">
+      <div class="container app-user-info">
+        <div class="row">
+          <div class="col-6 text-white">
+            <h5>Xin chào,</h5>
+            <h2>{{ current_user.hoten }}</h2>
+          </div>
+          <div class="col-6 text-end">
+            <button type="button" class="btn btn-primary bg-white text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#newTransaction">
+              <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE" />
+              </svg> Thêm giao dịch </button>
+          </div>
         </div>
-    </div>
-  </div>
-  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="newTransactionLabel">Ghi Chép Giao Dịch</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="pills-expense-tab" data-bs-toggle="pill" data-bs-target="#pills-expense" type="button" role="tab" aria-controls="pills-expense" aria-selected="true">Chi Tiêu</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-income-tab" data-bs-toggle="pill" data-bs-target="#pills-income" type="button" role="tab" aria-controls="pills-income" aria-selected="false">Thu Nhập</button>
-                </li>
-              </ul>
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-expense" role="tabpanel" aria-labelledby="pills-expense-tab">
-                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
-                        <div class="mb-3">
-                          <label for="spendAmount" class="form-label">Số tiền</label>
-                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">Danh Mục</label>
-                          <select class="form-select" name="category" required>
-                            <option selected disabled value="">Chọn danh mục</option>
-                            {% for category in expense_categories %}
-                                <option value="{{ category[0] }}">{{ category[1] }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendDate" class="form-label">Ngày</label>
-                            <input type="date" class="form-control" id="spendDate" name="date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nguồn tiền</label>
-                            <select class="form-select" name="source" required>
-                                <option selected disabled value="">Chọn nguồn tiền</option>
-                                {% for source in sources %}
-                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendNote" class="form-label">Ghi chú</label>
-                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
-                        </div>
-                        <input type="hidden" name="type" value="expense">
-                        <button type="submit" class="btn btn-primary">Thêm giao dịch chi</button>
-                    </form>
+      </div>
+      <div class="container bg-light app-content mt-3">
+        <div class="row">
+          <div class="col-12 col-md-7">
+            <div class="overview">
+              <div class="row">
+                <div class="col-12 col-sm-8">
+                  <div class="section-heading">Tổng Quan</div>
                 </div>
-                <div class="tab-pane fade" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab">
-                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
-                        <div class="mb-3">
-                          <label for="spendAmount" class="form-label">Số tiền</label>
-                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">Thống Kê Giao Dịch</label>
-                          <select class="form-select" name="category" required>
-                            <option selected disabled value="">Chọn danh mục</option>
-                            {% for category in income_categories %}
-                                <option value="{{ category[0] }}">{{ category[1] }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendDate" class="form-label">Ngày</label>
-                            <input type="date" class="form-control" id="spendDate" name="date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nguồn tiền</label>
-                            <select class="form-select" name="source" required>
-                                <option selected disabled value="">Chọn nguồn tiền</option>
-                                {% for source in sources %}
-                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendNote" class="form-label">Ghi chú</label>
-                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
-                        </div>
-                        <input type="hidden" name="type" value="income">
-                        <button type="submit" class="btn btn-primary">Thêm giao dịch thu</button>
-                    </form>
+                <div class="col-12 col-sm-4 text-end">
+                  <div class="input-group">
+                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.125 14.565L13.7475 12.315C13.2955 12.897 12.7537 13.4033 12.1425 13.815L14.5875 16.14C14.6903 16.2601 14.8174 16.357 14.9604 16.4243C15.1035 16.4916 15.2591 16.5278 15.4172 16.5305C15.5753 16.5332 15.7321 16.5024 15.8773 16.44C16.0226 16.3776 16.1529 16.2851 16.2598 16.1687C16.3667 16.0522 16.4476 15.9144 16.4973 15.7643C16.5469 15.6142 16.5642 15.4553 16.5479 15.2981C16.5316 15.1408 16.4822 14.9888 16.4028 14.8521C16.3234 14.7154 16.216 14.5971 16.0875 14.505L16.125 14.565Z" fill="#D9D9D9" />
+                        <path d="M8.355 1.5C7.01998 1.5 5.71493 1.89588 4.6049 2.63758C3.49487 3.37928 2.6297 4.43349 2.11881 5.66689C1.60792 6.90029 1.47425 8.25749 1.7347 9.56686C1.99515 10.8762 2.63802 12.079 3.58203 13.023C4.52603 13.967 5.72877 14.6099 7.03814 14.8703C8.34751 15.1308 9.70471 14.9971 10.9381 14.4862C12.1715 13.9753 13.2257 13.1101 13.9674 12.0001C14.7091 10.8901 15.105 9.58502 15.105 8.25C15.105 6.45979 14.3938 4.7429 13.128 3.47703C11.8621 2.21116 10.1452 1.5 8.355 1.5ZM8.355 13.02C7.41339 13.02 6.4929 12.7409 5.70988 12.2179C4.92685 11.6949 4.31643 10.9516 3.95574 10.0818C3.59506 9.21196 3.50031 8.25477 3.68347 7.33114C3.86662 6.40751 4.31946 5.5589 4.98476 4.89255C5.65006 4.22621 6.49795 3.77203 7.42129 3.58743C8.34463 3.40282 9.30198 3.49606 10.1723 3.85537C11.0427 4.21469 11.787 4.82394 12.3112 5.60614C12.8354 6.38835 13.116 7.30839 13.1175 8.25C13.1195 8.87633 12.9977 9.49688 12.7591 10.076C12.5206 10.6551 12.17 11.1814 11.7275 11.6247C11.2849 12.0679 10.7592 12.4193 10.1804 12.6588C9.60169 12.8982 8.98133 13.021 8.355 13.02Z" fill="#D9D9D9" />
+                      </svg>
+                    </span>
+                    <input type="text" class="form-control border-start-0" placeholder="Tìm kiếm" aria-label="Username" aria-describedby="basic-addon1">
+                  </div>
                 </div>
               </div>
+              <div class="row mt-4" role="tablist">
+                <div class="col-6" role="presentation">
+                  <div class="overview-item active" data-bs-toggle="pill" data-bs-target="#pills-overview-expense" type="button" role="tab" aria-controls="pills-overview-expense" aria-selected="true">
+                    <div class="heading">Chi tiêu <span>
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.89239 15.4921C4.12978 15.3742 4.40426 15.3554 4.65552 15.4398C4.90679 15.5241 5.11427 15.7048 5.23239 15.9421C5.86532 17.2203 6.82848 18.3061 8.02211 19.0869C9.21573 19.8677 10.5964 20.3152 12.0211 20.383C13.4458 20.4509 14.8628 20.1366 16.1252 19.4727C17.3876 18.8088 18.4496 17.8195 19.2011 16.6072C19.9526 15.3949 20.3663 14.0037 20.3994 12.5778C20.4325 11.1518 20.0838 9.74297 19.3894 8.49711C18.6949 7.25124 17.68 6.2137 16.4498 5.49194C15.2196 4.77018 13.8187 4.39046 12.3924 4.3921C10.9013 4.38564 9.43854 4.79973 8.17208 5.58685C6.90562 6.37397 5.88674 7.50221 5.23239 8.8421C5.11304 9.08079 4.90376 9.2623 4.65059 9.34669C4.39741 9.43108 4.12108 9.41144 3.88239 9.2921C3.64369 9.17275 3.46219 8.96347 3.37779 8.71029C3.2934 8.45712 3.31304 8.18079 3.43239 7.9421C4.43578 5.92284 6.09215 4.30196 8.13267 3.34253C10.1732 2.3831 12.4781 2.14144 14.6732 2.65677C16.8683 3.17211 18.8249 4.41419 20.2253 6.18142C21.6257 7.94865 22.3877 10.1373 22.3877 12.3921C22.3877 14.6469 21.6257 16.8356 20.2253 18.6028C18.8249 20.37 16.8683 21.6121 14.6732 22.1274C12.478 22.6428 10.1732 22.4011 8.13266 21.4417C6.09215 20.4822 4.43578 18.8614 3.43239 16.8421C3.3728 16.7235 3.33742 16.5942 3.32833 16.4617C3.31923 16.3293 3.3366 16.1963 3.37942 16.0707C3.42223 15.945 3.48965 15.8291 3.57772 15.7298C3.66579 15.6305 3.77276 15.5497 3.89239 15.4921ZM3.39239 11.3921L12.9824 11.3921L10.6824 9.1021C10.5892 9.00886 10.5152 8.89817 10.4647 8.77635C10.4143 8.65453 10.3883 8.52396 10.3883 8.3921C10.3883 8.26024 10.4143 8.12967 10.4647 8.00785C10.5152 7.88603 10.5892 7.77534 10.6824 7.6821C10.7756 7.58886 10.8863 7.5149 11.0081 7.46444C11.13 7.41398 11.2605 7.38801 11.3924 7.38801C11.5242 7.38801 11.6548 7.41398 11.7766 7.46444C11.8985 7.5149 12.0092 7.58886 12.1024 7.6821L16.1024 11.6821C16.1934 11.7772 16.2648 11.8893 16.3124 12.0121C16.4124 12.2556 16.4124 12.5286 16.3124 12.7721C16.2648 12.8948 16.1934 13.007 16.1024 13.1021L12.1024 17.1021C12.0094 17.1958 11.8988 17.2702 11.777 17.321C11.6551 17.3718 11.5244 17.3979 11.3924 17.3979C11.2604 17.3979 11.1297 17.3718 11.0078 17.321C10.886 17.2702 10.7754 17.1958 10.6824 17.1021C10.5887 17.0091 10.5143 16.8985 10.4635 16.7767C10.4127 16.6548 10.3866 16.5241 10.3866 16.3921C10.3866 16.2601 10.4127 16.1294 10.4635 16.0075C10.5143 15.8857 10.5887 15.7751 10.6824 15.6821L12.9824 13.3921L3.39239 13.3921C3.12717 13.3921 2.87282 13.2867 2.68528 13.0992C2.49774 12.9117 2.39239 12.6573 2.39239 12.3921C2.39239 12.1269 2.49774 11.8725 2.68528 11.685C2.87282 11.4975 3.12717 11.3921 3.39239 11.3921Z" fill="#FF819F" />
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="amount">{{ total_expense | int | format_number }} vnđ</div>
+                  </div>
+                </div>
+                <div class="col-6" role="presentation">
+                  <div class="overview-item" data-bs-toggle="pill" data-bs-target="#pills-overview-income" type="button" role="tab" aria-controls="pills-overview-income" aria-selected="false">
+                    <div class="heading">Thu nhập <span>
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.89239 15.4921C4.12978 15.3742 4.40426 15.3554 4.65552 15.4398C4.90679 15.5241 5.11427 15.7048 5.23239 15.9421C5.86532 17.2203 6.82848 18.3061 8.02211 19.0869C9.21573 19.8677 10.5964 20.3152 12.0211 20.383C13.4458 20.4509 14.8628 20.1366 16.1252 19.4727C17.3876 18.8088 18.4496 17.8195 19.2011 16.6072C19.9526 15.3949 20.3663 14.0037 20.3994 12.5778C20.4325 11.1518 20.0838 9.74297 19.3894 8.49711C18.6949 7.25124 17.68 6.2137 16.4498 5.49194C15.2196 4.77018 13.8187 4.39046 12.3924 4.3921C10.9013 4.38564 9.43854 4.79973 8.17208 5.58685C6.90562 6.37397 5.88674 7.50221 5.23239 8.8421C5.11304 9.08079 4.90376 9.2623 4.65059 9.34669C4.39741 9.43108 4.12108 9.41144 3.88239 9.2921C3.64369 9.17275 3.46219 8.96347 3.37779 8.71029C3.2934 8.45712 3.31304 8.18079 3.43239 7.9421C4.43578 5.92284 6.09215 4.30196 8.13267 3.34253C10.1732 2.3831 12.4781 2.14144 14.6732 2.65677C16.8683 3.17211 18.8249 4.41419 20.2253 6.18142C21.6257 7.94865 22.3877 10.1373 22.3877 12.3921C22.3877 14.6469 21.6257 16.8356 20.2253 18.6028C18.8249 20.37 16.8683 21.6121 14.6732 22.1274C12.478 22.6428 10.1732 22.4011 8.13266 21.4417C6.09215 20.4822 4.43578 18.8614 3.43239 16.8421C3.3728 16.7235 3.33742 16.5942 3.32833 16.4617C3.31923 16.3293 3.3366 16.1963 3.37942 16.0707C3.42223 15.945 3.48965 15.8291 3.57772 15.7298C3.66579 15.6305 3.77276 15.5497 3.89239 15.4921ZM3.39239 11.3921L12.9824 11.3921L10.6824 9.1021C10.5892 9.00886 10.5152 8.89817 10.4647 8.77635C10.4143 8.65453 10.3883 8.52396 10.3883 8.3921C10.3883 8.26024 10.4143 8.12967 10.4647 8.00785C10.5152 7.88603 10.5892 7.77534 10.6824 7.6821C10.7756 7.58886 10.8863 7.5149 11.0081 7.46444C11.13 7.41398 11.2605 7.38801 11.3924 7.38801C11.5242 7.38801 11.6548 7.41398 11.7766 7.46444C11.8985 7.5149 12.0092 7.58886 12.1024 7.6821L16.1024 11.6821C16.1934 11.7772 16.2648 11.8893 16.3124 12.0121C16.4124 12.2556 16.4124 12.5286 16.3124 12.7721C16.2648 12.8948 16.1934 13.007 16.1024 13.1021L12.1024 17.1021C12.0094 17.1958 11.8988 17.2702 11.777 17.321C11.6551 17.3718 11.5244 17.3979 11.3924 17.3979C11.2604 17.3979 11.1297 17.3718 11.0078 17.321C10.886 17.2702 10.7754 17.1958 10.6824 17.1021C10.5887 17.0091 10.5143 16.8985 10.4635 16.7767C10.4127 16.6548 10.3866 16.5241 10.3866 16.3921C10.3866 16.2601 10.4127 16.1294 10.4635 16.0075C10.5143 15.8857 10.5887 15.7751 10.6824 15.6821L12.9824 13.3921L3.39239 13.3921C3.12717 13.3921 2.87282 13.2867 2.68528 13.0992C2.49774 12.9117 2.39239 12.6573 2.39239 12.3921C2.39239 12.1269 2.49774 11.8725 2.68528 11.685C2.87282 11.4975 3.12717 11.3921 3.39239 11.3921Z" fill="#FF819F" />
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="amount">{{ total_income | int | format_number }} vnđ</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-overview-expense" role="tabpanel" aria-labelledby="pills-overview-expense-tab">
+                  <div class="row mt-5">
+                    <div class="col-12">
+                      <div id="expenseChart" class="d-flex justify-content-center"></div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <div class="row">
+                      <div class="col-10 section-heading">Danh Mục</div>
+                      <div class="col-2 text-end">
+                        <a href="{{ url_for('transactions') }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V14M12 12L20 4M20 4V9M20 4H15" stroke="#1230AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg></a>
+                      </div>
+                    </div>
+                    <div class="category-summary"> {% for category, amount, type, id in expense_stats %} <div class="row category-row align-items-center mt-4">
+                        <div class="col-8 category-name d-flex align-items-center">
+                          <span class="category-icon cat{{ id }} me-2"> 
+                            {% if id == 1 %} <img src="{{ url_for('static', filename='images/electricity.svg') }}" alt="Điện - Nước - Gas"> 
+                            {% elif id == 2 %} <img src="{{ url_for('static', filename='images/food.svg') }}" alt="Ăn uống"> 
+                            {% elif id == 3 %} <img src="{{ url_for('static', filename='images/shopping.svg') }}" alt="Mua sắm"> 
+                            {% elif id == 4 %} <img src="{{ url_for('static', filename='images/entertainment.svg') }}" alt="Giải trí"> 
+                            {% else %} <img src="{{ url_for('static', filename='images/default-category.svg') }}" alt="{{ category }}"> 
+                            {% endif %} 
+                          </span>
+                          <span>{{ category }}</span>
+                        </div>
+                        <div class="col-4 category-price text-end d-flex align-items-center justify-content-end">
+                          <span>{{ amount | int | format_number }} vnđ</span>
+                        </div>
+                      </div> {% endfor %} </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pills-overview-income" role="tabpanel" aria-labelledby="pills-overview-income-tab">
+                  <div class="row mt-5">
+                    <div class="col-12">
+                      <div id="incomeChart" class="d-flex justify-content-center"></div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <div class="section-heading">Danh Mục</div>
+                    <div class="category-summary"> {% for category, amount, type, id in income_stats %} <div class="row category-row align-items-center mt-4">
+                        <div class="col-8 category-name d-flex align-items-center">
+                          <span class="category-icon cat{{ id }} me-2"> 
+                            {% if id == 1 %} <img src="{{ url_for('static', filename='images/electricity.svg') }}" alt="Điện - Nước - Gas"> 
+                            {% elif id == 2 %} <img src="{{ url_for('static', filename='images/food.svg') }}" alt="Ăn uống"> 
+                            {% elif id == 3 %} <img src="{{ url_for('static', filename='images/shopping.svg') }}" alt="Mua sắm"> 
+                            {% elif id == 4 %} <img src="{{ url_for('static', filename='images/entertainment.svg') }}" alt="Giải trí"> 
+                            {% else %} <img src="{{ url_for('static', filename='images/default-category.svg') }}" alt="{{ category }}"> 
+                            {% endif %} 
+                          </span>
+                          <span>{{ category }}</span>
+                        </div>
+                        <div class="col-4 category-price text-end d-flex align-items-center justify-content-end">
+                          <span>{{ amount | int | format_number }} vnđ</span>
+                        </div>
+                      </div> {% endfor %} </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-5">
+            <div class="financial-trend">
+              <div class="section-heading">Xu Hướng Chi Tiêu</div>
+              <div id="financialTrendChart"></div>
+            </div>
+            <div class="fund-source">
+              <div class="row">
+                  <div class="col-10 section-heading">Nguồn Tiền</div>
+                  <div class="col-2 text-end">
+                      <a href="{{ url_for('sources') }}">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M10 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V18C4 18.5304 4.21071 19.0391 4.58579 19.4142C4.96086 19.7893 5.46957 20 6 20H18C18.5304 20 19.0391 19.7893 19.4142 19.4142C19.7893 19.0391 20 18.5304 20 18V14M12 12L20 4M20 4V9M20 4H15" stroke="#1230AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                      </a>
+                  </div>
+              </div>
+              <div class="fund-list mt-4">
+                  {% for tieude, status, card_type, type, sothe, sodu in top_sources %}
+                  <div class="fund-item mb-4">
+                      <div class="row">
+                          <div class="col-7 d-flex align-items-center gap-2">
+                              <span>
+                                {% if type == 'cash' %}
+                                  <img src="{{ url_for('static', filename='images/cash.svg') }}" >
+                                {% elif type == 'bank' %}
+                                  <img src="{{ url_for('static', filename='images/bank-transfer.svg') }}" >
+                                {% elif type == 'card' and card_type =='Visa'  %}
+                                  <img src="{{ url_for('static', filename='images/visa.svg') }}" >
+                                {% elif type == 'card' and card_type =='Master' %}
+                                  <img src="{{ url_for('static', filename='images/master.svg') }}" >
+                                {% elif type == 'card' and card_type =='ATM' %}
+                                  <img src="{{ url_for('static', filename='images/atm.svg') }}" >
+                                {% else %}
+                                  <img src="{{ url_for('static', filename='images/finly-white.svg') }}" >
+                                {% endif %}
+                              </span>
+                              <span>
+                                {{ tieude }}
+                              </span>
+                          </div>
+                          <div class="col-5 text-end">
+                            {% if status == 1 %}
+                              {% if type == 'wallet' %}
+                                <span>Mặc định</span>
+                              {% else %}
+                                <span>Đang hoạt động</span>
+                              {% endif %}
+                            {% else %}
+                              <span>Không hoạt động</span>
+                            {% endif %}
+                          </div>
+                      </div>
+                      <div class="row mt-4">
+                          <div class="col-12 fw-bold">
+                            {% if type == 'card' %}
+                              {{ sothe }}
+                            {% else %}
+                              {{ sodu | format_number }} vnđ
+                            {% endif %}
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>          
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="newTransactionLabel">Ghi Chép Giao Dịch</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-expense-tab" data-bs-toggle="pill" data-bs-target="#pills-expense" type="button" role="tab" aria-controls="pills-expense" aria-selected="true">Chi Tiêu</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-income-tab" data-bs-toggle="pill" data-bs-target="#pills-income" type="button" role="tab" aria-controls="pills-income" aria-selected="false">Thu Nhập</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-expense" role="tabpanel" aria-labelledby="pills-expense-tab">
+            <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+              <div class="mb-3">
+                <label for="spendAmount" class="form-label">Số tiền</label>
+                <input type="number" class="form-control" id="spendAmount" name="amount" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Danh Mục</label>
+                <select class="form-select" name="category" required>
+                  <option selected disabled value="">Chọn danh mục</option> {% for category in expense_categories %} <option value="{{ category[0] }}">{{ category[1] }}</option> {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="spendDate" class="form-label">Ngày</label>
+                <input type="date" class="form-control" id="spendDate" name="date" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nguồn tiền</label>
+                <select class="form-select" name="source" required>
+                  <option selected disabled value="">Chọn nguồn tiền</option> {% for source in sources %} <option value="{{ source[0] }}">{{ source[1] }}</option> {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="spendNote" class="form-label">Ghi chú</label>
+                <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+              </div>
+              <input type="hidden" name="type" value="expense">
+              <button type="submit" class="btn btn-primary">Thêm giao dịch chi</button>
+            </form>
+          </div>
+          <div class="tab-pane fade" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab">
+            <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+              <div class="mb-3">
+                <label for="spendAmount" class="form-label">Số tiền</label>
+                <input type="number" class="form-control" id="spendAmount" name="amount" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Thống Kê Giao Dịch</label>
+                <select class="form-select" name="category" required>
+                  <option selected disabled value="">Chọn danh mục</option> {% for category in income_categories %} <option value="{{ category[0] }}">{{ category[1] }}</option> {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="spendDate" class="form-label">Ngày</label>
+                <input type="date" class="form-control" id="spendDate" name="date" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nguồn tiền</label>
+                <select class="form-select" name="source" required>
+                  <option selected disabled value="">Chọn nguồn tiền</option> {% for source in sources %} <option value="{{ source[0] }}">{{ source[1] }}</option> {% endfor %}
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="spendNote" class="form-label">Ghi chú</label>
+                <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+              </div>
+              <input type="hidden" name="type" value="income">
+              <button type="submit" class="btn btn-primary">Thêm giao dịch thu</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block scripts %}
 <script>
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  }
+    const expenseMonthlyData = {{ expense_monthly_data | tojson }};
+    const incomeMonthlyData = {{ income_monthly_data | tojson }};
+    const months = {{ months | tojson }};
     var options = {
         series: [{
         name: 'Thu Nhập',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        data: incomeMonthlyData
       }, {
         name: 'Chi Tiêu',
-        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+        data: expenseMonthlyData
       }],
         chart: {
         type: 'bar',
@@ -248,21 +307,26 @@
         colors: ['transparent']
       },
       xaxis: {
-        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        categories: months,
       },
       yaxis: {
         title: {
-          text: '$ (thousands)'
-        }
+          text: 'vnđ'
+        },
+        labels:{
+          formatter: (value) => {
+            return `${numberWithCommas(value)}`;
+          },
+        },
       },
       fill: {
         opacity: 1
       },
       tooltip: {
         y: {
-          formatter: function (val) {
-            return "$ " + val + " vnđ"
-          }
+          formatter: (value) => {
+            return `${numberWithCommas(value)} vnđ`;
+          },
         }
       }
       };
@@ -272,7 +336,6 @@
 
 
     const chartExpenseData = {{ chart_expense_data | tojson }};
-  console.log(chartExpenseData);
     const expense_chart_labels = chartExpenseData.filter(item => item.type = 'expense').map(item => item.category); 
     const expense_chart_series = chartExpenseData.filter(item => item.type = 'expense').map(item => parseFloat(item.percentage));   
     const colorMap = {
@@ -310,5 +373,39 @@
       };
     var expenseChart = new ApexCharts(document.querySelector("#expenseChart"), options);
     expenseChart.render();
+
+    const chartIncomeData = {{ chart_income_data | tojson }};
+    const income_chart_labels = chartIncomeData.filter(item => item.type = 'income').map(item => item.category); 
+    const income_chart_series = chartIncomeData.filter(item => item.type = 'income').map(item => parseFloat(item.percentage));   
+
+    const income_chart_colors = income_chart_labels.map(label => colorMap[label] || '#445ec7');
+    var options = {
+        series: income_chart_series,
+        chart: {
+        width: 420,
+        type: 'donut',
+      },
+      dataLabels: {
+        enabled: true,
+        dropShadow: {
+            enabled: false,
+        }
+      },
+      labels: income_chart_labels,
+      colors: income_chart_colors,
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 300
+          },
+          legend: {
+            position: 'center'
+          }
+        }
+      }]
+      };
+    var incomeChart = new ApexCharts(document.querySelector("#incomeChart"), options);
+    incomeChart.render();
 </script>
 {% endblock%}

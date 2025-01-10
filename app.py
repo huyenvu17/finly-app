@@ -45,7 +45,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        connection = mysql.connection.cursor()
+        connection = mysql.connection.cursor()  
         connection.execute("SELECT ID, PASSWORD, USERNAME, HOTEN FROM nguoidung WHERE EMAIL = %s", [email])
         user = connection.fetchone()
         connection.close()
@@ -111,28 +111,92 @@ def dashboard():
             danhmuc d ON g.DANHMUC_ID = d.ID
         WHERE 
             g.NGUOIDUNG_ID = %s
+            AND g.TYPE = 'expense'
         GROUP BY 
             g.DANHMUC_ID, d.TEN, d.ID
         ORDER BY 
             TongSoTien DESC
     """, [current_user.id])
-    category_stats = connection.fetchall()
+    expense_stats = connection.fetchall()
+
+    connection.execute("""
+        SELECT 
+            d.TEN AS DanhMuc, 
+            SUM(g.SOTIEN) AS TongSoTien,
+            d.type as Loai, 
+            d.ID
+        FROM 
+            giaodich g
+        JOIN 
+            danhmuc d ON g.DANHMUC_ID = d.ID
+        WHERE 
+            g.NGUOIDUNG_ID = %s
+            AND g.TYPE = 'income'
+        GROUP BY 
+            g.DANHMUC_ID, d.TEN, d.ID
+        ORDER BY 
+            TongSoTien DESC
+    """, [current_user.id])
+    income_stats = connection.fetchall()
 
     # chart 
     # Tính tổng tất cả giao dịch
-    total_amount = sum(row[1] for row in category_stats)
+    total_expense_amount = sum(row[1] for row in expense_stats)
 
     # Chuyển dữ liệu thành danh sách các dict với tỷ lệ phần trăm
     chart_expense_data = [
         {
             'category': row[0],
-            'percentage': round((row[1] / total_amount) * 100, 2) if total_amount > 0 else 0,
+            'percentage': round((row[1] / total_expense_amount) * 100, 2) if total_expense_amount > 0 else 0,
             'type': row[2],
         }
-        for row in category_stats
+        for row in expense_stats
     ]
+    total_income_amount = sum(row[1] for row in income_stats)
+    chart_income_data = [
+        {
+            'category': row[0],
+            'percentage': round((row[1] / total_income_amount) * 100, 2) if total_income_amount > 0 else 0,
+            'type': row[2],
+        }
+        for row in income_stats
+    ]
+
+
+    # Dữ liệu xu hướng chi tiêu
+    # Tổng số tiền theo từng tháng cho biểu đồ cột
+    connection.execute("""
+        SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
+        FROM giaodich
+        WHERE NGUOIDUNG_ID = %s AND TYPE = 'expense'
+        GROUP BY MONTH(date)
+        ORDER BY MONTH(date)
+    """, [current_user.id])
+    expense_monthly = {row[0]: row[1] for row in connection.fetchall()}
+
+    connection.execute("""
+        SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
+        FROM giaodich
+        WHERE NGUOIDUNG_ID = %s AND TYPE = 'income'
+        GROUP BY MONTH(date)
+        ORDER BY MONTH(date)
+    """, [current_user.id])
+    income_monthly = {row[0]: row[1] for row in connection.fetchall()}
+
+    # Truy vấn danh sách nguồn tiền
+    connection.execute("""
+        SELECT tieude, status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s
+    """, [current_user.id])
+    all_sources = connection.fetchall()
+
+    # Lấy 3 mục đầu tiên
+    top_sources = all_sources[:3]
+
     connection.close()
-    
+
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    expense_monthly_data = [expense_monthly.get(i, 0) for i in range(1, 13)]
+    income_monthly_data = [income_monthly.get(i, 0) for i in range(1, 13)]
 
     return render_template(
         'dashboard.html',
@@ -143,8 +207,14 @@ def dashboard():
         income_categories=income_categories,
         total_expense=total_expense,
         total_income=total_income,
-        category_stats=category_stats,
-        chart_expense_data=chart_expense_data
+        expense_stats=expense_stats,
+        income_stats=income_stats,
+        chart_expense_data=chart_expense_data,
+        chart_income_data=chart_income_data,
+        expense_monthly_data=expense_monthly_data,
+        income_monthly_data=income_monthly_data,
+        months=months,
+        top_sources=top_sources,
     )
 
 @app.route('/logout')
@@ -249,12 +319,46 @@ def transactions():
 @app.route('/sources')
 @login_required
 def sources():
-    return render_template('sources.html')
+    connection = mysql.connection.cursor()
+    connection.execute("SELECT tieude, status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s", [current_user.id])
+    sources = connection.fetchall()
+    connection.close()
+    
+    return render_template('sources.html', sources=sources)
+
+@app.route('/add_source', methods=['POST'])
+@login_required
+def add_source():
+    title = request.form['title']
+    source_type = request.form['type']
+    card_type = request.form.get('card_type')  # Chỉ có giá trị nếu type = card
+    status = int(request.form['status'])
+
+    try:
+        connection = mysql.connection.cursor()
+        connection.execute("""
+            INSERT INTO nguonthu (NGUOIDUNG_ID, TIEUDE, TYPE, card_type, status)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (current_user.id, title, source_type, card_type, status))
+        mysql.connection.commit()
+        connection.close()
+        flash("Nguồn thu đã được thêm thành công!", "success")
+    except Exception as e:
+        flash(f"Có lỗi xảy ra: {e}", "danger")
+
+    return redirect(url_for('sources'))
+
+
 
 @app.route('/contact')
 @login_required
 def contact():
     return render_template('contact.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
 
 def get_categories():
     cur = mysql.connection.cursor()

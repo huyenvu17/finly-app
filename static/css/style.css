@@ -96,3 +96,42 @@
 .navbar-nav .nav-link.active {
     color: var(--bs-app-primary);
 }
+
+/* contact */
+.contact-container {
+    height: calc(100vh - 130px);
+}
+.contact-item .contact-icon {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+.contact-item .contact-icon svg {
+    width: 30px;
+    fill: var(--bs-app-primary);
+}
+
+@media screen and (max-width: 576px) {
+    .app-user-info, .app-content {
+        max-width: 380px;
+        padding: 0;
+    }
+    .overview-item {
+        padding: 10px 18px;
+        min-height: 110px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .overview-item .heading {
+        font-size: 16px;
+    }
+    .overview-item .amount {
+        font-size: 18px;
+    }
+    .contact-container {
+        height: auto;
+    }
+}
