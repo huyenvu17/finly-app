@@ -21,7 +21,7 @@
               <div class="row">
                   <div class="col-12">
                     <div class="fund-list mt-4">
-                        {% for tieude, status, card_type, type, sothe, sodu in sources %}
+                        {% for status, card_type, type, sothe, sodu in sources %}
                         <div class="fund-item mb-4">
                             <div class="row">
                                 <div class="col-7 d-flex align-items-center gap-2">
@@ -41,7 +41,7 @@
                                       {% endif %}
                                     </span>
                                     <span>
-                                      {{ tieude }}
+                                        {{ type | get_source_title }}
                                     </span>
                                 </div>
                                 <div class="col-5 text-end">
@@ -84,15 +84,12 @@
         <div class="modal-body">
             <form method="POST" action="{{ url_for('add_source') }}">
                 <div class="mb-3">
-                    <label for="title" class="form-label">Tên Nguồn Thu</label>
-                    <input type="text" class="form-control" id="title" name="title" required>
-                </div>
-                <div class="mb-3">
                     <label for="type" class="form-label">Loại Nguồn Thu</label>
                     <select class="form-select" id="type" name="type" required onchange="toggleCardType(this)">
-                        <option value="cash">Tiền mặt</option>
+                        <option value="wallet" disabled>Ví Finly</option>
+                        <option value="cash" {% if 'cash' in sources_types %}disabled{% endif %}>Tiền mặt</option>
                         <option value="card">Thẻ</option>
-                        <option value="bank">Ngân hàng</option>
+                        <option value="bank">Chuyển Khoản Ngân hàng</option>
                     </select>
                 </div>
                 <div class="mb-3 d-none" id="cardTypeContainer">
@@ -102,20 +99,28 @@
                         <option value="Master">Master</option>
                         <option value="Visa">Visa</option>
                     </select>
+                    <input type="text" class="form-control mt-2" id="sothe" name="sothe" placeholder="Nhập số thẻ">
                 </div>
                 <div class="mb-3">
-                    <label for="status" class="form-label">Trạng Thái</label>
-                    <select class="form-select" id="status" name="status" required>
-                        <option value="1" selected>Đang hoạt động</option>
-                        <option value="0">Không hoạt động</option>
-                    </select>
+                    <label for="sodu" class="form-label">Số Dư</label>
+                    <input type="number" class="form-control mt-2" id="sodu" name="sodu" placeholder="Nhập số dư ban đầu">
                 </div>
-                <button type="submit" class="btn btn-primary">Thêm Nguồn Thu</button>
+                <div class="mb-4">
+                    <label for="status" class="form-label">Trạng Thái</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" checked>
+                        <label class="form-check-label" for="status">Đang hoạt động</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Thêm Nguồn Thu</button>
+                </div>
             </form>
         </div>
       </div>
     </div>
   </div>
+
 {% endblock %}
 {% block scripts %}
 <script>

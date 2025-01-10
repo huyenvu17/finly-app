@@ -82,8 +82,6 @@ def register():
 def dashboard():
     # Truy vấn danh sách nguồn thu
     connection = mysql.connection.cursor()
-    connection.execute("SELECT ID, TIEUDE FROM nguonthu WHERE NGUOIDUNG_ID = %s", [current_user.id])
-    sources = connection.fetchall()
     # Truy vấn danh mục
     connection.execute("SELECT ID, TEN FROM danhmuc WHERE type = 'expense'")
     expense_categories = connection.fetchall()
@@ -185,7 +183,7 @@ def dashboard():
 
     # Truy vấn danh sách nguồn tiền
     connection.execute("""
-        SELECT tieude, status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s
+        SELECT status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s
     """, [current_user.id])
     all_sources = connection.fetchall()
 
@@ -202,7 +200,7 @@ def dashboard():
         'dashboard.html',
         request=request,
         username=current_user.username,
-        sources=sources,
+        # sources=sources,
         expense_categories=expense_categories,
         income_categories=income_categories,
         total_expense=total_expense,
@@ -320,7 +318,7 @@ def transactions():
 @login_required
 def sources():
     connection = mysql.connection.cursor()
-    connection.execute("SELECT tieude, status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s", [current_user.id])
+    connection.execute("SELECT status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s", [current_user.id])
     sources = connection.fetchall()
     connection.close()
     
@@ -329,24 +327,32 @@ def sources():
 @app.route('/add_source', methods=['POST'])
 @login_required
 def add_source():
-    title = request.form['title']
-    source_type = request.form['type']
-    card_type = request.form.get('card_type')  # Chỉ có giá trị nếu type = card
-    status = int(request.form['status'])
+    # Get data from the form
+    source_type = request.form.get('type')
+    card_type = request.form.get('card_type') if source_type == 'card' else None
+    card_number = request.form.get('sothe') if source_type == 'card' else None
+    balance = float(request.form.get('sodu', 0))  # Initial balance
+    status = int(request.form.get('status', 1))  # Default to active (1)
+
+    # Dynamically generate the title based on source type
+    title = get_source_title(source_type)
 
     try:
+        # Insert into the database
         connection = mysql.connection.cursor()
         connection.execute("""
-            INSERT INTO nguonthu (NGUOIDUNG_ID, TIEUDE, TYPE, card_type, status)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (current_user.id, title, source_type, card_type, status))
+            INSERT INTO nguonthu (NGUOIDUNG_ID, TYPE, card_type, SOTHE, SODU, status)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (current_user.id, source_type, card_type, card_number, balance, status))
         mysql.connection.commit()
         connection.close()
+
         flash("Nguồn thu đã được thêm thành công!", "success")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
 
     return redirect(url_for('sources'))
+
 
 
 
@@ -367,11 +373,20 @@ def get_categories():
     cur.close()
     return categories
 
+def get_source_title(source_type):
+    titles = {
+        "cash": "Tiền mặt",
+        "card": "Thẻ",
+        "wallet": "Ví Finly",
+        "bank": "Chuyển khoản ngân hàng"
+    }
+    return titles.get(source_type, "Nguồn thu khác")
+
 def format_number(value):
     return "{:,.0f}".format(value).replace(",", ".")
 
 app.jinja_env.filters['format_number'] = format_number
-
+app.jinja_env.filters['get_source_title'] = get_source_title
 
 if __name__ == '__main__':
     app.run(debug=True)

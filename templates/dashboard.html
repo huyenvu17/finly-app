@@ -142,7 +142,7 @@
                   </div>
               </div>
               <div class="fund-list mt-4">
-                  {% for tieude, status, card_type, type, sothe, sodu in top_sources %}
+                  {% for status, card_type, type, sothe, sodu in top_sources %}
                   <div class="fund-item mb-4">
                       <div class="row">
                           <div class="col-7 d-flex align-items-center gap-2">
@@ -162,7 +162,7 @@
                                 {% endif %}
                               </span>
                               <span>
-                                {{ tieude }}
+                                {{ type | get_source_title }}
                               </span>
                           </div>
                           <div class="col-5 text-end">
@@ -232,7 +232,7 @@
               <div class="mb-3">
                 <label class="form-label">Nguồn tiền</label>
                 <select class="form-select" name="source" required>
-                  <option selected disabled value="">Chọn nguồn tiền</option> {% for source in sources %} <option value="{{ source[0] }}">{{ source[1] }}</option> {% endfor %}
+                  <option selected disabled value="">Chọn nguồn tiền</option> {% for source in sources_types %} <option value="{{ source[0] }}">{{ source[1] }}</option> {% endfor %}
                 </select>
               </div>
               <div class="mb-3">

@@ -17,38 +17,39 @@
                     <div class="section-heading">Hồ Sơ</div>
                     <form method="GET" action="" class="mb-4">
                       <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-12 mt-2">
                               <input type="text" name="username" class="form-control" placeholder="username" value="username">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-12 mt-3">
                               <input type="text" name="search" class="form-control" placeholder="Họ Tên" value="{{ current_user.hoten }}">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-12 mt-3">
                               <input type="email" name="email" class="form-control" placeholder="email" value="email">
                           </div>
-                          <div class="col-md-2">
+                          <div class="col-12 col-md-3 mt-3">
                               <button type="submit" class="btn btn-primary w-100">Cập Nhật</button>
                           </div>
                         </div>
                     </form>
                   </div>
               </div>
+              <br/>
               <div class="row">
                 <div class="col-12">
-                  <div class="section-heading">Đổi Mật Khẩu</div>
+                  <div class="section-heading">Cập Nhật Mật Khẩu</div>
                   <form method="GET" action="" class="mb-4">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-12 mt-3">
                             <input type="password" name="current-password" class="form-control" placeholder="current-password">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 mt-3">
                             <input type="password" name="new-password" class="form-control" placeholder="new-password">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 mt-3">
                             <input type="password" name="confirm-password" class="form-control" placeholder="confirm-password">
                         </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary w-100">Cập Nhật</button>
+                        <div class="col-12 col-md-3 mt-3">
+                            <button type="submit" class="btn btn-primary w-100">Đổi Mật Khẩu</button>
                         </div>
                       </div>
                   </form>

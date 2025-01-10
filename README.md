@@ -49,8 +49,8 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
 
 ## Người thực hiện
 
-Vũ Ngọc Huyền   - 23210228
-Lê Hàn Trúc Chi - 23210200
+- Vũ Ngọc Huyền   - 23210228
+- Lê Hàn Trúc Chi - 23210200
 
 
 ## Tài liệu tham khảo
