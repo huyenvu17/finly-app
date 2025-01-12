@@ -57,6 +57,10 @@
                   <a class="nav-link {% if request.path == url_for('sources') %}active{% endif %}" 
                      href="{{ url_for('sources') }}">Nguồn Tiền</a>
               </li>
+              <li class="nav-item me-3">
+                <a class="nav-link {% if request.path == url_for('categories') %}active{% endif %}" 
+                   href="{{ url_for('categories') }}">Danh Mục</a>
+            </li>
               <li class="nav-item">
                   <a class="nav-link {% if request.path == url_for('contact') %}active{% endif %}" 
                      href="{{ url_for('contact') }}">Liên Hệ</a>
@@ -106,9 +110,9 @@
             if (flashMessages) {
                 flashMessages.style.transition = 'opacity 0.5s ease';
                 flashMessages.style.opacity = '0';
-                setTimeout(() => flashMessages.remove(), 500);
+                setTimeout(() => flashMessages.remove(), 2000);
             }
-        }, 500);
+        }, 2000);
     </script>
     {% block scripts %}
     {% endblock %}

@@ -32,9 +32,9 @@
                                   <select name="category" class="form-select">
                                       <option value="">Chọn danh mục</option>
                                       {% for category in categories %}
-                                          <option value="{{ category[0] }}" {% if request.args.get('category') == category[0]|string %}selected{% endif %}>
-                                              {{ category[1] }}
-                                          </option>
+                                        <option value="{{ category[0] }}" {% if request.args.get('category') == category[0]|string %}selected{% endif %}>
+                                            {{ category[1] }}
+                                        </option>
                                       {% endfor %}
                                   </select>
                               </div>

@@ -16,7 +16,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 login_manager.remember_cookie_duration = timedelta(days=7)
 
-# Model người dùng
+# Quản lý phiên đăng nhập người dùng
 class User(UserMixin):
     def __init__(self, id, username, email, hoten):
         self.id = id
@@ -39,6 +39,7 @@ def redirect_authenticated_users():
     if current_user.is_authenticated and request.endpoint in ['login', 'register']:
         return redirect(url_for('dashboard'))
 
+#login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -58,6 +59,7 @@ def login():
             flash("Email hoặc mật khẩu không chính xác.")
     return render_template('login.html')
 
+# register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -67,16 +69,42 @@ def register():
         password = request.form['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        connection = mysql.connection.cursor()
-        connection.execute("INSERT INTO nguoidung (USERNAME, HOTEN, EMAIL, PASSWORD) VALUES (%s, %s, %s, %s)",
-                    (username, hoten, email, hashed_password.decode('utf-8')))
-        mysql.connection.commit()
-        connection.close()
+        try:
+            connection = mysql.connection.cursor()
+            # Thêm người dùng mới vào bảng nguoidung
+            connection.execute("""
+                INSERT INTO nguoidung (USERNAME, HOTEN, EMAIL, PASSWORD) 
+                VALUES (%s, %s, %s, %s)
+            """, (username, hoten, email, hashed_password.decode('utf-8')))
+            mysql.connection.commit()
 
-        flash("Đăng ký thành công! Hãy đăng nhập.")
-        return redirect(url_for('login'))
+            # Lấy ID người dùng vừa được thêm
+            user_id = connection.lastrowid
+
+            # Thêm ví mặc định cho người dùng mới
+            connection.execute("""
+                INSERT INTO nguonthu (NGUOIDUNG_ID, type, SOTHE, SODU, status) 
+                VALUES (%s, %s, NULL, 0, 1)
+            """, (user_id, 'wallet'))
+            mysql.connection.commit()
+            connection.close()
+
+            flash("Đăng ký thành công! Hãy đăng nhập.")
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(f"Có lỗi xảy ra trong quá trình đăng ký: {e}", "danger")
+            return redirect(url_for('register'))
     return render_template('register.html')
 
+# logout
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("Bạn đã đăng xuất.")
+    return redirect(url_for('login'))
+
+# dashboard
 @app.route('/')
 @login_required
 def dashboard():
@@ -186,10 +214,9 @@ def dashboard():
         SELECT status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s
     """, [current_user.id])
     all_sources = connection.fetchall()
-
     # Lấy 3 mục đầu tiên
     top_sources = all_sources[:3]
-
+    sources_types = [(source[0], get_source_title(source[2])) for source in all_sources]
     connection.close()
 
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -200,7 +227,6 @@ def dashboard():
         'dashboard.html',
         request=request,
         username=current_user.username,
-        # sources=sources,
         expense_categories=expense_categories,
         income_categories=income_categories,
         total_expense=total_expense,
@@ -213,48 +239,10 @@ def dashboard():
         income_monthly_data=income_monthly_data,
         months=months,
         top_sources=top_sources,
+        sources_types=sources_types
     )
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash("Bạn đã đăng xuất.")
-    return redirect(url_for('login'))
-
-@app.route('/add_transaction', methods=['POST'])
-@login_required
-def add_transaction():
-    # Lấy dữ liệu từ form
-    amount = request.form.get('amount')
-    category = request.form.get('category')
-    date = request.form.get('date')
-    source = request.form.get('source')
-    note = request.form.get('note')
-    transaction_type = request.form.get('type')  # 'expense' hoặc 'income'
-
-    # Kiểm tra dữ liệu
-    if not amount or not category or not date or not source:
-        flash("Vui lòng điền đầy đủ thông tin.", "danger")
-        return redirect(url_for('dashboard'))
-
-    try:
-        # Kết nối cơ sở dữ liệu và chèn giao dịch
-        cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO giaodich (NGUOIDUNG_ID, DANHMUC_ID, NGUONTHU_ID, type, SOTIEN, date, MOTA)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (current_user.id, category, source, transaction_type, amount, date, note))
-        mysql.connection.commit()
-        cur.close()
-
-        flash("Giao dịch đã được thêm thành công!", "success")
-    except Exception as e:
-        flash(f"Đã xảy ra lỗi: {e}", "danger")
-
-    return redirect(url_for('dashboard'))
-
-
+# transactions
 @app.route('/transactions', methods=['GET'])
 @login_required
 def transactions():
@@ -314,30 +302,82 @@ def transactions():
                            transaction_type=transaction_type,
                            search_query=search_query)
 
+# add transactions
+@app.route('/add_transaction', methods=['POST'])
+@login_required
+def add_transaction():
+    # Lấy dữ liệu từ form
+    amount = request.form.get('amount')
+    category = request.form.get('category')
+    date = request.form.get('date')
+    source = request.form.get('source')
+    note = request.form.get('note')
+    transaction_type = request.form.get('type')  # 'expense' hoặc 'income'
+
+    # Kiểm tra dữ liệu
+    if not amount or not category or not date or not source:
+        flash("Vui lòng điền đầy đủ thông tin.", "danger")
+        return redirect(url_for('dashboard'))
+
+    try:
+        # Kết nối cơ sở dữ liệu và chèn giao dịch
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            INSERT INTO giaodich (NGUOIDUNG_ID, DANHMUC_ID, NGUONTHU_ID, type, SOTIEN, date, MOTA)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (current_user.id, category, source, transaction_type, amount, date, note))
+        mysql.connection.commit()
+        cur.close()
+
+        flash("Giao dịch đã được thêm thành công!", "success")
+    except Exception as e:
+        flash(f"Đã xảy ra lỗi: {e}", "danger")
+
+    return redirect(url_for('dashboard'))
+
+#sources
 @app.route('/sources')
 @login_required
 def sources():
     connection = mysql.connection.cursor()
-    connection.execute("SELECT status, card_type, type, sothe, sodu FROM nguonthu WHERE NGUOIDUNG_ID = %s", [current_user.id])
-    sources = connection.fetchall()
-    connection.close()
-    
-    return render_template('sources.html', sources=sources)
 
+    # Fetch tất cả nguồn thu
+    connection.execute("""
+        SELECT status, card_type, type, sothe, sodu 
+        FROM nguonthu 
+        WHERE NGUOIDUNG_ID = %s
+    """, [current_user.id])
+    sources = connection.fetchall()
+
+    # Lấy danh sách các loại nguồn thu từ sources
+    existing_types = [source[2] for source in sources]  # Lấy cột `type` từ mỗi dòng
+
+    # Kiểm tra nếu đã tồn tại cash hoặc bank
+    disable_cash = 'cash' in existing_types
+    disable_bank = 'bank' in existing_types
+
+    connection.close()
+
+    return render_template(
+        'sources.html',
+        sources=sources,  # Truyền danh sách nguồn thu
+        disable_cash=disable_cash,  # Truyền trạng thái disabled cho cash
+        disable_bank=disable_bank   # Truyền trạng thái disabled cho bank
+    )
+
+
+# add source
 @app.route('/add_source', methods=['POST'])
 @login_required
 def add_source():
-    # Get data from the form
-    source_type = request.form.get('type')
-    card_type = request.form.get('card_type') if source_type == 'card' else None
-    card_number = request.form.get('sothe') if source_type == 'card' else None
-    balance = float(request.form.get('sodu', 0))  # Initial balance
-    status = int(request.form.get('status', 1))  # Default to active (1)
-
-    # Dynamically generate the title based on source type
-    title = get_source_title(source_type)
-
     try:
+        # Get data from the form
+        source_type = request.form.get('type')
+        card_type = request.form.get('card_type') if source_type == 'card' else None
+        card_number = request.form.get('sothe') if source_type == 'card' else None
+        balance = float(request.form.get('sodu', 0))  # Initial balance
+        status = 1 if request.form.get('status') == 'on' else 0  # Checkbox xử lý giá trị
+
         # Insert into the database
         connection = mysql.connection.cursor()
         connection.execute("""
@@ -345,22 +385,54 @@ def add_source():
             VALUES (%s, %s, %s, %s, %s, %s)
         """, (current_user.id, source_type, card_type, card_number, balance, status))
         mysql.connection.commit()
-        connection.close()
 
         flash("Nguồn thu đã được thêm thành công!", "success")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
+    finally:
+        connection.close()
 
     return redirect(url_for('sources'))
 
 
+# categories
+@app.route('/categories')
+@login_required
+def categories():
+    return render_template('categories.html', categories=get_categories())
 
+# add category
+@app.route('/add_category', methods=['POST'])
+@login_required
+def add_category():
+    # Get data from the form
+    cateName = request.form.get('cateName')
+    cateType = request.form.get('cateType')
 
+    try:
+        # Insert into the database
+        connection = mysql.connection.cursor()
+        connection.execute("""
+            INSERT INTO danhmuc (TEN, TYPE)
+            VALUES (%s, %s)
+        """, (cateName, cateType))
+        mysql.connection.commit()
+        connection.close()
+    
+
+        flash("Danh mục đã được thêm thành công!", "success")
+    except Exception as e:
+        flash(f"Có lỗi xảy ra: {e}", "danger")
+
+    return redirect(url_for('categories'))
+
+# contact
 @app.route('/contact')
 @login_required
 def contact():
     return render_template('contact.html')
 
+# profile
 @app.route('/profile')
 @login_required
 def profile():
@@ -368,7 +440,7 @@ def profile():
 
 def get_categories():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT ID, TEN FROM danhmuc")
+    cur.execute("SELECT * FROM danhmuc")
     categories = cur.fetchall()
     cur.close()
     return categories

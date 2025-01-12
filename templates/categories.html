@@ -1,0 +1,110 @@
+{% extends 'layout.html'%}
+{% block content %}
+<div class="app-container">
+    <div class="position-relative">
+        <div class="bg-primary app-container-background position-absolute right-0 left-0 w-100 "></div>
+        <div class="position-relative w-100 pt-5">
+            <div class="container app-user-info">
+                <div class="row">
+                    <div class="col-12 text-white col-sm-6">
+                        <h2>Thống Kê Danh Mục</h2>
+                    </div>
+                    <div class="col-12 col-sm-6 text-end">
+                        <button type="button" class="btn btn-primary bg-white text-primary fw-bold w-auto"  data-bs-toggle="modal" data-bs-target="#newTransaction"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE"/>
+                            </svg>
+                            Thêm danh mục</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container bg-light app-content mt-3">
+              <div class="row">
+                  <div class="col-12">
+                      <!-- Bộ lọc và tìm kiếm -->
+                      <form method="GET" action="{{ url_for('categories') }}" class="mb-4">
+                          <div class="row">
+                              <!-- Ô tìm kiếm -->
+                              <div class="col-md-4">
+                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ search_query }}">
+                            </div>
+                              <!-- Lọc danh mục -->
+                              <div class="col-md-3">
+                                  <select name="category" class="form-select">
+                                      <option value="">Chọn danh mục</option>
+                                      {% for category in categories %}
+                                        <option value="{{ category[0] }}" {% if request.args.get('category') == category[0]|string %}selected{% endif %}>
+                                            {{ category[1] }}
+                                        </option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                              
+                              <div class="col-md-2">
+                                  <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                              </div>
+                          </div>
+                      </form>
+                      <!-- Bảng giao dịch -->
+                      <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên danh mục</th>
+                                    <th scope="col">Loại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                    <tr>
+                                        <th scope="row">{{ category[0] }}</th>
+                                        <td>{{ category[1] }}</td>
+                                        <td>
+                                          {% if category[2] == 'expense' %}
+                                              <span class="badge text-bg-primary">Chi tiêu</span>
+                                          {% else %}
+                                              <span class="badge text-bg-info">Thu nhập</span>
+                                          {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                      
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="newTransactionLabel">Ghi Chép Giao Dịch</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="my-3" action="{{ url_for('add_category') }}" method="POST">
+                <div class="mb-3">
+                  <label for="cateName" class="form-label">Tên danh mục</label>
+                  <input type="text" class="form-control" id="cateName" name="cateName" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Phân loại</label>
+                  <select class="form-select" name="cateType" required>
+                        <option selected disabled value="">Chọn danh mục</option>
+                        <option value="expense">Chi tiêu</option>
+                        <option value="income">Thu nhập</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm danh mục</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock%}
