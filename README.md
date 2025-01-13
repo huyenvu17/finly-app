@@ -59,7 +59,9 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
     ```
 
 7. **Truy cập ứng dụng:**
+    ```bash
     Mở trình duyệt và truy cập `http://localhost:5000`.
+    ```
 
 ## Người thực hiện
 

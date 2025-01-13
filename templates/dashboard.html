@@ -81,10 +81,10 @@
                     <div class="category-summary"> {% for category, amount, type, id in expense_stats %} <div class="row category-row align-items-center mt-4">
                         <div class="col-8 category-name d-flex align-items-center">
                           <span class="category-icon cat{{ id }} me-2"> 
-                            {% if id == 1 %} <img src="{{ url_for('static', filename='images/electricity.svg') }}" alt="Điện - Nước - Gas"> 
-                            {% elif id == 2 %} <img src="{{ url_for('static', filename='images/food.svg') }}" alt="Ăn uống"> 
-                            {% elif id == 3 %} <img src="{{ url_for('static', filename='images/shopping.svg') }}" alt="Mua sắm"> 
-                            {% elif id == 4 %} <img src="{{ url_for('static', filename='images/entertainment.svg') }}" alt="Giải trí"> 
+                            {% if category == "Điện - Nước - Gas" %} <img src="{{ url_for('static', filename='images/electricity.svg') }}" alt="Điện - Nước - Gas"> 
+                            {% elif category == "Ăn uống" %} <img src="{{ url_for('static', filename='images/food.svg') }}" alt="Ăn uống"> 
+                            {% elif category == "Mua sắm" %} <img src="{{ url_for('static', filename='images/shopping.svg') }}" alt="Mua sắm"> 
+                            {% elif category == "Giải trí" %} <img src="{{ url_for('static', filename='images/entertainment.svg') }}" alt="Giải trí"> 
                             {% else %} <img src="{{ url_for('static', filename='images/default-category.svg') }}" alt="{{ category }}"> 
                             {% endif %} 
                           </span>

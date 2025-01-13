@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from flask_mysqldb import MySQL
-from helpers.helpers import get_categories
+from helpers.helpers import get_categories, get_source_title
 
 mysql = MySQL()
 
@@ -21,7 +21,7 @@ def transactions():
     # Câu truy vấn cơ sở dữ liệu
     connection = mysql.connection.cursor()
     query = """
-        SELECT g.ID, d.TEN AS category, g.type, g.SOTIEN, g.date, g.MOTA
+        SELECT g.ID, d.TEN AS category, g.type, g.SOTIEN, g.date, g.MOTA, d.ID AS category_id
         FROM giaodich g
         JOIN danhmuc d ON g.DANHMUC_ID = d.ID
         WHERE g.NGUOIDUNG_ID = %s
@@ -57,13 +57,17 @@ def transactions():
         WHERE NGUOIDUNG_ID = %s
     """, [current_user.id])
     sources = connection.fetchall()
-
+    sources_types = [(source[0], get_source_title(source[2])) for source in sources]
     # Lấy tổng số giao dịch để tính số trang
     connection.execute("SELECT COUNT(*) FROM giaodich WHERE NGUOIDUNG_ID = %s", [current_user.id])
     total_transactions = connection.fetchone()[0]
     total_pages = (total_transactions + items_per_page - 1) // items_per_page
 
-
+    # Truy vấn danh mục
+    connection.execute("SELECT ID, TEN FROM danhmuc WHERE type = 'expense'")
+    expense_categories = connection.fetchall()
+    connection.execute("SELECT ID, TEN FROM danhmuc WHERE type = 'income'")
+    income_categories = connection.fetchall()
     connection.close()
 
     # Truyền dữ liệu vào template
@@ -74,7 +78,10 @@ def transactions():
                            categories=get_categories(), 
                            transaction_type=transaction_type,
                            search_query=search_query,
-                           sources=sources)
+                           sources=sources,
+                           sources_types=sources_types,
+                           expense_categories=expense_categories,
+                           income_categories=income_categories,)
 
 # add transactions
 @transactions_bp.route('/add_transaction', methods=['POST'])
@@ -88,10 +95,13 @@ def add_transaction():
     note = request.form.get('note')
     transaction_type = request.form.get('type')  # 'expense' hoặc 'income'
 
+    # Kiểm tra `request.referrer` để xác định trang gọi
+    referrer = request.referrer or url_for('dashboard_bp.dashboard')
+
     # Kiểm tra dữ liệu
     if not amount or not category or not date or not source:
         flash("Vui lòng điền đầy đủ thông tin.", "danger")
-        return redirect(url_for('dashboard_bp.dashboard'))
+        return redirect(referrer)
 
     try:
         # Kết nối cơ sở dữ liệu và chèn giao dịch
@@ -107,7 +117,8 @@ def add_transaction():
     except Exception as e:
         flash(f"Đã xảy ra lỗi: {e}", "danger")
 
-    return redirect(url_for('dashboard_bp.dashboard'))
+    return redirect(referrer)
+
 
 # update transactions
 @transactions_bp.route('/update_transaction', methods=['POST'])
@@ -134,7 +145,28 @@ def update_transaction():
     finally:
         connection.close()
 
-    return redirect(url_for('transactions'))
+    return redirect(url_for('transactions_bp.transactions'))
 
 
 
+# delete transaction
+@transactions_bp.route('/delete_transaction', methods=['POST'])
+@login_required
+def delete_transaction():
+    transaction_id = request.form.get('transaction_id')
+    if not transaction_id:
+        flash("Không tìm thấy giao dịch cần xóa.", "danger")
+        return redirect(url_for('transactions_bp.transactions'))
+
+    try:
+        # Xóa giao dịch khỏi cơ sở dữ liệu
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM giaodich WHERE ID = %s AND NGUOIDUNG_ID = %s", (transaction_id, current_user.id))
+        mysql.connection.commit()
+        cur.close()
+
+        flash("Giao dịch đã được xóa thành công!", "info")
+    except Exception as e:
+        flash(f"Đã xảy ra lỗi khi xóa giao dịch: {e}", "danger")
+
+    return redirect(url_for('transactions_bp.transactions'))

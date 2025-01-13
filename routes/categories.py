@@ -30,7 +30,7 @@ def add_category():
         connection.close()
     
 
-        flash("Danh mục đã được thêm thành công!", "success")
+        flash("Danh mục đã được thêm thành công!", "info")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
 

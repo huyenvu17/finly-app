@@ -26,6 +26,14 @@
                               <!-- Ô tìm kiếm -->
                               <div class="col-md-4">
                                 <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ search_query }}">
+                              </div>
+                                <!-- Lọc loại giao dịch -->
+                              <div class="col-md-3">
+                                <select name="type" class="form-select">
+                                    <option value="">Chọn loại</option>
+                                    <option value="expense" {% if transaction_type == 'expense' %}selected{% endif %}>Chi tiêu</option>
+                                    <option value="income" {% if transaction_type == 'income' %}selected{% endif %}>Thu nhập</option>
+                                </select>
                             </div>
                               <div class="col-md-2">
                                   <button type="submit" class="btn btn-primary w-100">Lọc</button>

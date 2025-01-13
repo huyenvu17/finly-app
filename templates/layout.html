@@ -84,10 +84,15 @@
       </nav>
       <main class="flex-grow-1">
         <div>
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
                 <div id="flask-messages">
-                    <div class="alert alert-info">{{ messages[0] }}</div>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
                 </div>
             {% endif %}
             {% endwith %}
@@ -108,11 +113,11 @@
         setTimeout(function() {
             const flashMessages = document.getElementById('flask-messages');
             if (flashMessages) {
-                flashMessages.style.transition = 'opacity 0.5s ease';
+                flashMessages.style.transition = 'opacity 0.2s ease';
                 flashMessages.style.opacity = '0';
-                setTimeout(() => flashMessages.remove(), 2000);
+                setTimeout(() => flashMessages.remove(), 500);
             }
-        }, 2000);
+        }, 1500);
     </script>
     {% block scripts %}
     {% endblock %}

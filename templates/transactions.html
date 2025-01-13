@@ -84,10 +84,20 @@
                                         <td>
                                             <button 
                                                 class="btn btn-primary btn-sm" 
-                                                onclick="openEditModal('{{ transaction[0] }}', '{{ transaction[1] }}', '{{ transaction[2] }}', '{{ transaction[3] }}', '{{ transaction[4] }}', '{{                                          transaction[5] }}', {{ categories|tojson|safe }})">
+                                                onclick="openEditModal(
+                                                    '{{ transaction[0] }}',
+                                                    '{{ transaction[1] }}',
+                                                    '{{ transaction[2] }}',
+                                                    '{{ transaction[3] }}',
+                                                    '{{ transaction[4] }}',
+                                                    '{{ transaction[5] }}')">
                                                 Sửa
                                             </button>
-                                            <a href="" class="btn btn-danger btn-sm">Xóa</a>
+                                            <button 
+                                                class="btn btn-danger btn-sm" 
+                                                onclick="openDeleteModal('{{ transaction[0] }}')">
+                                                Xóa
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -112,7 +122,7 @@
         </div>
     </div>
   </div>
-  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel">
+  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -120,88 +130,76 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Chi Tiêu</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Thu Nhập</button>
-                </li>
-              </ul>
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
-                        <div class="mb-3">
-                          <label for="spendAmount" class="form-label">Số tiền</label>
-                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">Danh Mục</label>
-                          <select class="form-select" name="category" required>
-                            <option selected disabled value="">Chọn danh mục</option>
-                            {% for category in categories %}
-                                <option value="{{ category[0] }}">{{ category[1] }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendDate" class="form-label">Ngày</label>
-                            <input type="date" class="form-control" id="spendDate" name="date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nguồn tiền</label>
-                            <select class="form-select" name="source" required>
-                                <option selected disabled value="">Chọn nguồn tiền</option>
-                                {% for source in sources %}
-                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendNote" class="form-label">Ghi chú</label>
-                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
-                        </div>
-                        <input type="hidden" name="type" value="expense">
-                        <button type="submit" class="btn btn-primary">Thêm giao dịch chi</button>
-                    </form>
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-expense-tab" data-bs-toggle="pill" data-bs-target="#pills-expense" type="button" role="tab" aria-controls="pills-expense" aria-selected="true">Chi Tiêu</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-income-tab" data-bs-toggle="pill" data-bs-target="#pills-income" type="button" role="tab" aria-controls="pills-income" aria-selected="false">Thu Nhập</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-expense" role="tabpanel" aria-labelledby="pills-expense-tab">
+              <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
+                <div class="mb-3">
+                  <label for="spendAmount" class="form-label">Số tiền</label>
+                  <input type="number" class="form-control" id="spendAmount" name="amount" required>
                 </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
-                        <div class="mb-3">
-                          <label for="spendAmount" class="form-label">Số tiền</label>
-                          <input type="number" class="form-control" id="spendAmount" name="amount" required>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">Thống Kê Giao Dịch</label>
-                          <select class="form-select" name="category" required>
-                            <option selected disabled value="">Chọn danh mục</option>
-                            {% for category in income_categories %}
-                                <option value="{{ category[0] }}">{{ category[1] }}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendDate" class="form-label">Ngày</label>
-                            <input type="date" class="form-control" id="spendDate" name="date" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nguồn tiền</label>
-                            <select class="form-select" name="source" required>
-                                <option selected disabled value="">Chọn nguồn tiền</option>
-                                {% for source in sources %}
-                                    <option value="{{ source[0] }}">{{ source[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="spendNote" class="form-label">Ghi chú</label>
-                            <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
-                        </div>
-                        <input type="hidden" name="type" value="income">
-                        <button type="submit" class="btn btn-primary">Thêm giao dịch thu</button>
-                    </form>
+                <div class="mb-3">
+                  <label class="form-label">Danh Mục</label>
+                  <select class="form-select" name="category" required>
+                    <option selected disabled value="">Chọn danh mục</option> {% for category in expense_categories %} <option value="{{ category[0] }}">{{ category[1] }}</option> {% endfor %}
+                  </select>
                 </div>
-              </div>
+                <div class="mb-3">
+                  <label for="spendDate" class="form-label">Ngày</label>
+                  <input type="date" class="form-control" id="spendDate" name="date" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Nguồn tiền</label>
+                  <select class="form-select" name="source" required>
+                    <option selected disabled value="">Chọn nguồn tiền</option> {% for id, type in sources_types %} <option value="{{ id }}">{{ type }}</option> {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="spendNote" class="form-label">Ghi chú</label>
+                  <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+                </div>
+                <input type="hidden" name="type" value="expense">
+                <button type="submit" class="btn btn-primary">Thêm giao dịch chi</button>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab">
+              <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
+                <div class="mb-3">
+                  <label for="spendAmount" class="form-label">Số tiền</label>
+                  <input type="number" class="form-control" id="spendAmount" name="amount" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Thống Kê Giao Dịch</label>
+                  <select class="form-select" name="category" required>
+                    <option selected disabled value="">Chọn danh mục</option> {% for category in income_categories %} <option value="{{ category[0] }}">{{ category[1] }}</option> {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="spendDate" class="form-label">Ngày</label>
+                  <input type="date" class="form-control" id="spendDate" name="date" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Nguồn tiền</label>
+                  <select class="form-select" name="source" required>
+                    <option selected disabled value="">Chọn nguồn tiền</option> {% for id, type in sources_types %} <option value="{{ id }}">{{ type }}</option> {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="spendNote" class="form-label">Ghi chú</label>
+                  <textarea class="form-control" id="spendNote" rows="3" name="note"></textarea>
+                </div>
+                <input type="hidden" name="type" value="income">
+                <button type="submit" class="btn btn-primary">Thêm giao dịch thu</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -214,19 +212,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editTransactionForm" method="POST" action="/update_transaction">
+                <form id="editTransactionForm" method="POST" action="{{ url_for('transactions_bp.update_transaction') }}">
                     <input type="hidden" id="edit_transaction_id" name="transaction_id">
                     <div class="mb-3">
                         <label for="edit_amount" class="form-label">Số tiền</label>
                         <input type="number" class="form-control" id="edit_amount" name="amount" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_date" class="form-label">Ngày</label>
-                        <input type="date" class="form-control" id="edit_date" name="date" required>
+                        <label for="edit_category" class="form-label">Danh mục</label>
+                        <select class="form-select" id="edit_category" name="category" required>
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_note" class="form-label">Ghi chú</label>
-                        <textarea class="form-control" id="edit_note" name="note"></textarea>
+                        <label for="edit_date" class="form-label">Ngày</label>
+                        <input type="date" class="form-control" id="edit_date" name="date" required>
                     </div>
                     <div class="mb-3">
                         <label for="edit_type" class="form-label">Loại</label>
@@ -236,8 +235,8 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_category" class="form-label">Danh mục</label>
-                        <select class="form-select" id="edit_category" name="category" required></select>
+                        <label for="edit_note" class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="edit_note" name="note"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
@@ -247,35 +246,63 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="deleteTransactionModal" tabindex="-1" aria-labelledby="deleteTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTransactionModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa giao dịch này không?
+            </div>
+            <div class="modal-footer">
+                <form id="deleteTransactionForm" method="POST" action="{{ url_for('transactions_bp.delete_transaction') }}">
+                    <input type="hidden" id="delete_transaction_id" name="transaction_id">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 {% block scripts %}
 <script>
-    function openEditModal(id, category, type, amount, date, note, categories) {
-        // Set modal values
-        document.getElementById('edit_transaction_id').value = id;
-        document.getElementById('edit_amount').value = amount;
-        document.getElementById('edit_date').value = date;
-        document.getElementById('edit_note').value = note;
-        document.getElementById('edit_type').value = type;
-    
-        // Populate the category dropdown
-        const categorySelect = document.getElementById('edit_category');
-        categorySelect.innerHTML = '';
-        categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat[0];
-            option.textContent = cat[1];
-            if (cat[0] == category) {
-                option.selected = true;
-            }
-            categorySelect.appendChild(option);
-        });
-    
-        // Show the modal
-        const editModal = new bootstrap.Modal(document.getElementById('editTransactionModal'));
-        editModal.show();
-    }
+  function formatNumber(value) {
+    return new Intl.NumberFormat('vi-VN').format(value);
+}
+const categoriesData = {{ categories | tojson | safe }};
+function openEditModal(id, category, type, amount, date, note) {
+    document.getElementById('edit_transaction_id').value = id || '';
+    document.getElementById('edit_amount').value = formatNumber(amount) || '';
+    document.getElementById('edit_date').value = date || '';
+    document.getElementById('edit_note').value = note || '';
+    document.getElementById('edit_type').value = type || '';
+
+    // Populate the category dropdown using categoriesData
+    const categorySelect = document.getElementById('edit_category');
+    categorySelect.innerHTML = ''; // Clear existing options
+    categoriesData.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat[0];
+        option.textContent = cat[1];
+        if (cat[0] == category) {
+            option.selected = true;
+        }
+        categorySelect.appendChild(option);
+    });
+
+    // Show the modal
+    const editModal = new bootstrap.Modal(document.getElementById('editTransactionModal'));
+    editModal.show();
+}
+function openDeleteModal(transactionId) {
+        document.getElementById('delete_transaction_id').value = transactionId;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteTransactionModal'));
+        deleteModal.show();
+}
+
 </script>
 {% endblock%}

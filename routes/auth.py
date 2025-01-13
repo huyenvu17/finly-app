@@ -22,10 +22,10 @@ def login():
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user[1].encode('utf-8')):
             login_user(User(id=user[0], username=user[2], email=email, hoten=user[3]))
-            flash("Đăng nhập thành công!")
+            flash("Đăng nhập thành công!", "info")
             return redirect(url_for('dashboard_bp.dashboard'))
         else:
-            flash("Email hoặc mật khẩu không chính xác.")
+            flash("Email hoặc mật khẩu không chính xác.", "danger")
     return render_template('login.html')
 
 # register
@@ -70,5 +70,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash("Bạn đã đăng xuất.")
+    flash("Bạn đã đăng xuất.", "info")
     return redirect(url_for('auth_bp.login'))
