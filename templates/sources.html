@@ -65,8 +65,8 @@
                                   {% endif %}
                                 </div>
                                 <div class="col-5 text-end">
-                                  <a href="{{ url_for('add_source') }}" class="btn btn-primary bg-white text-primary fw-bold">Cập nhật</a>
-                                  <a href="{{ url_for('add_source') }}" class="btn btn-danger fw-bold">Xóa</a>
+                                  <a href="{{ url_for('sources_bp.add_source') }}" class="btn btn-primary bg-white text-primary fw-bold">Cập nhật</a>
+                                  <a href="{{ url_for('sources_bp.add_source') }}" class="btn btn-danger fw-bold">Xóa</a>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="POST" action="{{ url_for('add_source') }}">
+            <form method="POST" action="{{ url_for('sources_bp.add_source') }}">
                 <div class="mb-3">
                     <label for="type" class="form-label">Loại Nguồn Tiền</label>
                     <select class="form-select" id="type" name="type" required>

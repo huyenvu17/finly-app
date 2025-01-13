@@ -21,7 +21,7 @@
               <div class="row">
                   <div class="col-12">
                       <!-- Bộ lọc và tìm kiếm -->
-                      <form method="GET" action="{{ url_for('transactions') }}" class="mb-4">
+                      <form method="GET" action="{{ url_for('transactions_bp.transactions') }}" class="mb-4">
                           <div class="row">
                               <!-- Ô tìm kiếm -->
                               <div class="col-md-4">
@@ -82,7 +82,11 @@
                                         <td>{{ transaction[4] }}</td>
                                         <td>{{ transaction[5] }}</td>
                                         <td>
-                                            <a href="" class="btn btn-primary btn-sm">Sửa</a>
+                                            <button 
+                                                class="btn btn-primary btn-sm" 
+                                                onclick="openEditModal('{{ transaction[0] }}', '{{ transaction[1] }}', '{{ transaction[2] }}', '{{ transaction[3] }}', '{{ transaction[4] }}', '{{                                          transaction[5] }}', {{ categories|tojson|safe }})">
+                                                Sửa
+                                            </button>
                                             <a href="" class="btn btn-danger btn-sm">Xóa</a>
                                         </td>
                                     </tr>
@@ -93,7 +97,7 @@
                             <ul class="pagination justify-content-center">
                                 {% for page in range(1, total_pages + 1) %}
                                     <li class="page-item {% if page == current_page %}active{% endif %}">
-                                        <a class="page-link" href="{{ url_for('transactions', page=page, category=request.args.get('category'), type=request.args.get('type'), search=request.args.get('search')) }}">
+                                        <a class="page-link" href="{{ url_for('transactions_bp.transactions', page=page, category=request.args.get('category'), type=request.args.get('type'), search=request.args.get('search')) }}">
                                             {{ page }}
                                         </a>
                                     </li>
@@ -108,7 +112,7 @@
         </div>
     </div>
   </div>
-  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
+  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -126,7 +130,7 @@
               </ul>
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+                    <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
                         <div class="mb-3">
                           <label for="spendAmount" class="form-label">Số tiền</label>
                           <input type="number" class="form-control" id="spendAmount" name="amount" required>
@@ -135,7 +139,7 @@
                           <label class="form-label">Danh Mục</label>
                           <select class="form-select" name="category" required>
                             <option selected disabled value="">Chọn danh mục</option>
-                            {% for category in expense_categories %}
+                            {% for category in categories %}
                                 <option value="{{ category[0] }}">{{ category[1] }}</option>
                             {% endfor %}
                           </select>
@@ -162,7 +166,7 @@
                     </form>
                 </div>
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <form class="my-3" action="{{ url_for('add_transaction') }}" method="POST">
+                    <form class="my-3" action="{{ url_for('transactions_bp.add_transaction') }}" method="POST">
                         <div class="mb-3">
                           <label for="spendAmount" class="form-label">Số tiền</label>
                           <input type="number" class="form-control" id="spendAmount" name="amount" required>
@@ -202,6 +206,76 @@
       </div>
     </div>
   </div>
+<div class="modal fade" id="editTransactionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editTransactionModalLabel">Sửa Giao Dịch</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editTransactionForm" method="POST" action="/update_transaction">
+                    <input type="hidden" id="edit_transaction_id" name="transaction_id">
+                    <div class="mb-3">
+                        <label for="edit_amount" class="form-label">Số tiền</label>
+                        <input type="number" class="form-control" id="edit_amount" name="amount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_date" class="form-label">Ngày</label>
+                        <input type="date" class="form-control" id="edit_date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_note" class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="edit_note" name="note"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_type" class="form-label">Loại</label>
+                        <select class="form-select" id="edit_type" name="type" required>
+                            <option value="income">Thu nhập</option>
+                            <option value="expense">Chi tiêu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_category" class="form-label">Danh mục</label>
+                        <select class="form-select" id="edit_category" name="category" required></select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 {% block scripts %}
+<script>
+    function openEditModal(id, category, type, amount, date, note, categories) {
+        // Set modal values
+        document.getElementById('edit_transaction_id').value = id;
+        document.getElementById('edit_amount').value = amount;
+        document.getElementById('edit_date').value = date;
+        document.getElementById('edit_note').value = note;
+        document.getElementById('edit_type').value = type;
+    
+        // Populate the category dropdown
+        const categorySelect = document.getElementById('edit_category');
+        categorySelect.innerHTML = '';
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat[0];
+            option.textContent = cat[1];
+            if (cat[0] == category) {
+                option.selected = true;
+            }
+            categorySelect.appendChild(option);
+        });
+    
+        // Show the modal
+        const editModal = new bootstrap.Modal(document.getElementById('editTransactionModal'));
+        editModal.show();
+    }
+</script>
 {% endblock%}

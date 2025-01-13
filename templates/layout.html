@@ -14,7 +14,7 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg bg-white border-bottom border-body" data-bs-theme="light">
         <div class="container">
-          <a class="navbar-brand pe-4" href="{{ url_for('dashboard') }}"><svg width="103" height="30" viewBox="0 0 103 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <a class="navbar-brand pe-4" href="{{ url_for('dashboard_bp.dashboard') }}"><svg width="103" height="30" viewBox="0 0 103 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_32_193)">
             <mask id="mask0_32_193" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="17" width="7" height="12">
             <path d="M0 17.6613H6.12245V28.551H0V17.6613Z" fill="white"/>
@@ -46,24 +46,24 @@
             {% if current_user.is_authenticated %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
               <li class="nav-item me-3">
-                  <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" 
-                     href="{{ url_for('dashboard') }}">Trang Chủ</a>
+                  <a class="nav-link {% if request.path == url_for('dashboard_bp.dashboard') %}active{% endif %}" 
+                     href="{{ url_for('dashboard_bp.dashboard') }}">Trang Chủ</a>
               </li>
               <li class="nav-item me-3">
-                  <a class="nav-link {% if request.path == url_for('transactions') %}active{% endif %}" 
-                     href="{{ url_for('transactions') }}">Giao dịch</a>
+                  <a class="nav-link {% if request.path == url_for('transactions_bp.transactions') %}active{% endif %}" 
+                     href="{{ url_for('transactions_bp.transactions') }}">Giao dịch</a>
               </li>
               <li class="nav-item me-3">
-                  <a class="nav-link {% if request.path == url_for('sources') %}active{% endif %}" 
-                     href="{{ url_for('sources') }}">Nguồn Tiền</a>
+                  <a class="nav-link {% if request.path == url_for('sources_bp.sources') %}active{% endif %}" 
+                     href="{{ url_for('sources_bp.sources') }}">Nguồn Tiền</a>
               </li>
               <li class="nav-item me-3">
-                <a class="nav-link {% if request.path == url_for('categories') %}active{% endif %}" 
-                   href="{{ url_for('categories') }}">Danh Mục</a>
+                <a class="nav-link {% if request.path == url_for('categories_bp.categories') %}active{% endif %}" 
+                   href="{{ url_for('categories_bp.categories') }}">Danh Mục</a>
             </li>
               <li class="nav-item">
-                  <a class="nav-link {% if request.path == url_for('contact') %}active{% endif %}" 
-                     href="{{ url_for('contact') }}">Liên Hệ</a>
+                  <a class="nav-link {% if request.path == url_for('contact_bp.contact') %}active{% endif %}" 
+                     href="{{ url_for('contact_bp.contact') }}">Liên Hệ</a>
               </li>
           </ul>
                   <div class="dropdown">
@@ -71,13 +71,13 @@
                           <img src="{{ url_for('static', filename='images/profile.png') }}" alt="profile-img" class="rounded-circle">
                       </div>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">Hồ Sơ</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Thoát</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('profile_bp.profile') }}">Hồ Sơ</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('auth_bp.logout') }}">Thoát</a></li>
                       </ul>
                   </div>
             
             {% else %}
-                <a href="{{ url_for('login') }}" class="btn btn-primary bg-white text-primary fw-bold ms-auto">Đăng Nhập</a>
+                <a href="{{ url_for('auth_bp.login') }}" class="btn btn-primary bg-white text-primary fw-bold ms-auto">Đăng Nhập</a>
             {% endif%}
             </div>
         </div>

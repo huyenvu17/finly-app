@@ -21,24 +21,12 @@
               <div class="row">
                   <div class="col-12">
                       <!-- Bộ lọc và tìm kiếm -->
-                      <form method="GET" action="{{ url_for('categories') }}" class="mb-4">
+                      <form method="GET" action="{{ url_for('categories_bp.categories') }}" class="mb-4">
                           <div class="row">
                               <!-- Ô tìm kiếm -->
                               <div class="col-md-4">
                                 <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ search_query }}">
                             </div>
-                              <!-- Lọc danh mục -->
-                              <div class="col-md-3">
-                                  <select name="category" class="form-select">
-                                      <option value="">Chọn danh mục</option>
-                                      {% for category in categories %}
-                                        <option value="{{ category[0] }}" {% if request.args.get('category') == category[0]|string %}selected{% endif %}>
-                                            {{ category[1] }}
-                                        </option>
-                                      {% endfor %}
-                                  </select>
-                              </div>
-                              
                               <div class="col-md-2">
                                   <button type="submit" class="btn btn-primary w-100">Lọc</button>
                               </div>
@@ -86,7 +74,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form class="my-3" action="{{ url_for('add_category') }}" method="POST">
+            <form class="my-3" action="{{ url_for('categories_bp.add_category') }}" method="POST">
                 <div class="mb-3">
                   <label for="cateName" class="form-label">Tên danh mục</label>
                   <input type="text" class="form-control" id="cateName" name="cateName" required>
