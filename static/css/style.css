@@ -62,6 +62,18 @@
     margin-top: 5px;
 }
 
+.overview-income-img {
+    transform: rotate(-225deg);
+    margin-bottom: 3px;
+}
+.overview-income-img path {
+    fill: #79BF24;
+}
+.overview-expense-img {
+    transform: rotate(-45deg);
+    margin-bottom: 3px;
+}
+
 .category-icon {
     width: 35px;
     height: 35px;
