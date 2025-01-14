@@ -7,7 +7,7 @@
             <div class="container app-user-info">
                 <div class="row">
                     <div class="col-12 text-white col-sm-6">
-                        <h2>Thống Kê Nguồn thu</h2>
+                        <h2>Thống Kê Nguồn Thu</h2>
                     </div>
                     <div class="col-6 text-end">
                         <button type="button" class="btn btn-primary bg-white text-primary fw-bold"  data-bs-toggle="modal" data-bs-target="#newSource"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +102,7 @@
                     <label for="type" class="form-label">Loại Nguồn thu</label>
                     <select class="form-select" id="type" name="type" required onchange="toggleCardType(this)">
                       <option value="wallet">Ví Finly</option>
-                      <option value="cash" >thu mặt</option>
+                      <option value="cash" >Tiền mặt</option>
                       <option value="card">Thẻ</option>
                       <option value="bank">Chuyển Khoản Ngân hàng</option>
                   </select>
@@ -223,7 +223,7 @@ function openEditSourceModal(id, balance, status, type, cardType, cardNumber) {
     const typeDisplay = document.getElementById('edit_type_display');
     const typeInput = document.getElementById('edit_type');
     typeDisplay.value = type === 'wallet' ? 'Ví Finly' :
-                        type === 'cash' ? 'thu mặt' :
+                        type === 'cash' ? 'tiền mặt' :
                         type === 'card' ? 'Thẻ' : 'Chuyển Khoản Ngân hàng';
     typeInput.value = type;
     const cardTypeContainer = document.getElementById('cardTypeContainer');

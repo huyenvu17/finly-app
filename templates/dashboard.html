@@ -29,8 +29,8 @@
                 <div class="col-12 col-sm-4 text-end">
                   <div class="input-group">
                     <input type="month" class="form-control" id="overviewMonthFilter" 
-                          value="{{ selected_month_year }}" 
-                          onchange="filterOverviewByMonth(this.value)">
+                    value="{{ selected_month_year }}" 
+                    onchange="filterOverviewByMonth(this.value)">
                   </div>
                 </div>
               </div>
@@ -305,20 +305,28 @@
 {% block scripts %}
 <script>
 
-  function filterOverviewByMonth(month) {
-    if (month) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('month', month);
-      window.location.href = url.toString();
-    } else {
-      alert("Vui lòng chọn tháng hợp lệ!");
-    }
-  }
-  function filterYear(year) {
+function filterOverviewByMonth(monthYear) {
+  if (monthYear) {
     const url = new URL(window.location.href);
-    url.searchParams.set('year', year);
+    url.searchParams.set('month', monthYear); // Định dạng YYYY-MM từ input type="month"
     window.location.href = url.toString();
+  } else {
+    alert("Vui lòng chọn một tháng hợp lệ!");
   }
+}
+  function filterYear(year) {
+  const month = '01'; // Mặc định tháng 1 khi đổi năm
+  const url = new URL(window.location.href);
+  url.searchParams.set('month', `${year}-${month.padStart(2, '0')}`);
+  window.location.href = url.toString();
+}
+
+function filterMonth(month) {
+  const year = document.getElementById('yearFilter').value;
+  const url = new URL(window.location.href);
+  url.searchParams.set('month', `${year}-${month.padStart(2, '0')}`);
+  window.location.href = url.toString();
+}
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }

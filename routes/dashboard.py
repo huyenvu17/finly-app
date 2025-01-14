@@ -11,17 +11,14 @@ dashboard_bp = Blueprint('dashboard_bp', __name__)
 @dashboard_bp.route('/')
 @login_required
 def dashboard():
-    # Lấy giá trị tháng và năm từ input hoặc mặc định là tháng hiện tại
     current_date = datetime.now()
-    default_month_year = f"{current_date.year}-{current_date.month:02d}"  # Format YYYY-MM
     default_year = current_date.year
-    
-    # Tách tháng và năm từ giá trị input
-    selected_month_year = request.args.get('month', default_month_year)
-    selected_month = map(int, selected_month_year.split('-'))
-    selected_year = int(request.args.get('year', default_year))
-    # Lấy giá trị năm
-    selected_year_stat = int(request.args.get('year', default_year))
+
+    # Lấy năm cho Xu hướng Chi tiêu và tháng cho Tổng quan
+    selected_year_trend = int(request.args.get('year', default_year))
+    default_month_year = f"{current_date.year}-{current_date.month:02d}"  # Mặc định tháng hiện tại
+    selected_month_year = request.args.get('month', default_month_year)  # Giá trị từ input type="month"
+    selected_year, selected_month = map(int, selected_month_year.split('-'))
 
     connection = mysql.connection.cursor()
   
@@ -31,7 +28,7 @@ def dashboard():
     connection.execute("SELECT ID, TEN FROM danhmuc WHERE type = 'income'")
     income_categories = connection.fetchall()
 
-    # Tính tổng chi tiêu
+    # Dữ liệu Tổng quan
     connection.execute("""
         SELECT SUM(SOTIEN)
         FROM giaodich
@@ -42,7 +39,6 @@ def dashboard():
     """, [current_user.id, selected_month, selected_year])
     total_expense = connection.fetchone()[0] or 0
 
-    # Tính tổng thu nhập
     connection.execute("""
         SELECT SUM(SOTIEN)
         FROM giaodich
@@ -53,12 +49,11 @@ def dashboard():
     """, [current_user.id, selected_month, selected_year])
     total_income = connection.fetchone()[0] or 0
 
-    # Lấy thống kê tổng số tiền theo danh mục
-    # Truy vấn giao dịch theo tháng và năm
-    filters = "WHERE NGUOIDUNG_ID = %s AND MONTH(date) = %s AND YEAR(date) = %s"
+    # Điều kiện chung
+    filters = "WHERE g.NGUOIDUNG_ID = %s AND MONTH(date) = %s AND YEAR(date) = %s"
     params = [current_user.id, selected_month, selected_year]
 
-    # Truy vấn chi tiêu
+    # Truy vấn giao dịch chi tiêu
     connection.execute(f"""
         SELECT d.TEN AS DanhMuc, SUM(g.SOTIEN) AS TongSoTien, d.type, d.ID
         FROM giaodich g
@@ -69,7 +64,7 @@ def dashboard():
     """, params)
     expense_stats = connection.fetchall()
 
-    # Truy vấn thu nhập
+    # Truy vấn giao dịch thu nhập
     connection.execute(f"""
         SELECT d.TEN AS DanhMuc, SUM(g.SOTIEN) AS TongSoTien, d.type, d.ID
         FROM giaodich g
@@ -81,10 +76,10 @@ def dashboard():
     income_stats = connection.fetchall()
 
     # chart 
-    # Tính tổng tất cả giao dịch
+    # Tính tổng tất cả giao dịch chi tiêu
     total_expense_amount = sum(row[1] for row in expense_stats)
 
-    # Chuyển dữ liệu thành danh sách các dict với tỷ lệ phần trăm
+    # Biểu đồ chi tiêu
     chart_expense_data = [
         {
             'category': row[0],
@@ -93,7 +88,9 @@ def dashboard():
         }
         for row in expense_stats
     ]
+    # Tính tổng tất cả giao dịch thu nhập
     total_income_amount = sum(row[1] for row in income_stats)
+    # Biểu đồ thu nhập
     chart_income_data = [
         {
             'category': row[0],
@@ -103,26 +100,23 @@ def dashboard():
         for row in income_stats
     ]
 
-    # Dữ liệu xu hướng chi tiêu
-    # Tổng số tiền theo từng tháng cho biểu đồ cột
-    # Tính tổng chi tiêu theo từng tháng trong năm
+    # Dữ liệu Xu hướng Chi tiêu
     connection.execute("""
         SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
         FROM giaodich
         WHERE NGUOIDUNG_ID = %s AND TYPE = 'expense' AND YEAR(date) = %s
         GROUP BY MONTH(date)
         ORDER BY MONTH(date)
-    """, [current_user.id, selected_year])
+    """, [current_user.id, selected_year_trend])
     expense_monthly = {row[0]: row[1] for row in connection.fetchall()}
 
-    # Tính tổng thu nhập theo từng tháng trong năm
     connection.execute("""
         SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
         FROM giaodich
         WHERE NGUOIDUNG_ID = %s AND TYPE = 'income' AND YEAR(date) = %s
         GROUP BY MONTH(date)
         ORDER BY MONTH(date)
-    """, [current_user.id, selected_year])
+    """, [current_user.id, selected_year_trend])
     income_monthly = {row[0]: row[1] for row in connection.fetchall()}
 
     # Tạo danh sách đầy đủ 12 tháng
@@ -147,8 +141,8 @@ def dashboard():
         username=current_user.username,
         expense_categories=expense_categories,
         income_categories=income_categories,
-        selected_month_year=selected_month_year,
         selected_year=selected_year,
+        selected_month_year=selected_month_year,
         total_expense=total_expense,
         total_income=total_income,
         expense_stats=expense_stats,
