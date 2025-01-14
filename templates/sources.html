@@ -7,13 +7,13 @@
             <div class="container app-user-info">
                 <div class="row">
                     <div class="col-12 text-white col-sm-6">
-                        <h2>Thống Kê Nguồn Tiền</h2>
+                        <h2>Thống Kê Nguồn thu</h2>
                     </div>
                     <div class="col-6 text-end">
                         <button type="button" class="btn btn-primary bg-white text-primary fw-bold"  data-bs-toggle="modal" data-bs-target="#newSource"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE"/>
                             </svg>
-                            Thêm nguồn tiền</button>
+                            Thêm nguồn thu</button>
                     </div>
                 </div>
             </div>
@@ -93,16 +93,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newSourceLabel">Thêm Nguồn Tiền</h1>
+                <h1 class="modal-title fs-5" id="newSourceLabel">Thêm Nguồn thu</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <form method="POST" action="{{ url_for('sources_bp.add_source') }}">
                 <div class="mb-3">
-                    <label for="type" class="form-label">Loại Nguồn Tiền</label>
+                    <label for="type" class="form-label">Loại Nguồn thu</label>
                     <select class="form-select" id="type" name="type" required onchange="toggleCardType(this)">
                       <option value="wallet">Ví Finly</option>
-                      <option value="cash" >Tiền mặt</option>
+                      <option value="cash" >thu mặt</option>
                       <option value="card">Thẻ</option>
                       <option value="bank">Chuyển Khoản Ngân hàng</option>
                   </select>
@@ -118,7 +118,7 @@
               </div>
               <div class="mb-3">
                 <label for="sodu" class="form-label">Số Dư</label>
-                <input type="number" class="form-control" id="sodu" name="balance" placeholder="Nhập số dư" required>
+                <input type="number" class="form-control" id="sodu" name="balance" placeholder="Nhập số dư">
             </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Trạng Thái</label>
@@ -127,7 +127,7 @@
                         <option value="0">Không hoạt động</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Thêm Nguồn Tiền</button>
+                <button type="submit" class="btn btn-primary">Thêm Nguồn Thu</button>
             </form>
             </div>
         </div>
@@ -137,16 +137,16 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="editSourceModalLabel">Cập nhật thông tin nguồn tiền</h5>
+              <h5 class="modal-title" id="editSourceModalLabel">Cập nhật thông tin nguồn thu</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
               <form id="editSourceForm" method="POST" action="{{ url_for('sources_bp.update_source') }}">
                   <input type="hidden" id="edit_source_id" name="source_id">
 
-                  <!-- Tên loại nguồn tiền -->
+                  <!-- Tên loại nguồn thu -->
                   <div class="mb-3">
-                      <label class="form-label">Loại nguồn tiền</label>
+                      <label class="form-label">Loại nguồn thu</label>
                       <input type="text" class="form-control" id="edit_type_display" readonly>
                       <input type="hidden" id="edit_type" name="type">
                   </div>
@@ -166,7 +166,7 @@
                   <!-- Số dư -->
                   <div class="mb-3">
                       <label for="edit_balance" class="form-label">Số dư</label>
-                      <input type="number" class="form-control" id="edit_balance" name="balance" required>
+                      <input type="number" class="form-control" id="edit_balance" name="balance" min="0" step="1">
                   </div>
 
                   <!-- Trạng thái -->
@@ -188,11 +188,11 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h1 class="modal-title fs-5" id="deleteSourceModalLabel">Xác Nhận Xóa Nguồn Tiền</h1>
+              <h1 class="modal-title fs-5" id="deleteSourceModalLabel">Xác Nhận Xóa Nguồn thu</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-              <p>Bạn có chắc chắn muốn xóa nguồn tiền <strong id="delete_source_name"></strong> không?</p>
+              <p>Bạn có chắc chắn muốn xóa nguồn thu <strong id="delete_source_name"></strong> không?</p>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -201,24 +201,29 @@
       </div>
   </div>
 </div>
-
-
 {% endblock %}
 {% block scripts %}
 <script>
 const disable_cash = disable_cash;
 const disable_bank = disable_bank;
-
+function toggleCardType(select) {
+  const cardTypeContainer = document.getElementById('cardTypeContainer');
+  if (select.value === 'card') {
+      cardTypeContainer.classList.remove('d-none');
+  } else {
+      cardTypeContainer.classList.add('d-none');
+  }
+}
 function openEditSourceModal(id, balance, status, type, cardType, cardNumber) {
     document.getElementById('edit_source_id').value = id;
-    document.getElementById('edit_balance').value = balance;
+    document.getElementById('edit_balance').value = Math.round(balance || 0);
     document.getElementById('edit_status').value = status;
     document.getElementById('edit_type').value = type;
 
     const typeDisplay = document.getElementById('edit_type_display');
     const typeInput = document.getElementById('edit_type');
     typeDisplay.value = type === 'wallet' ? 'Ví Finly' :
-                        type === 'cash' ? 'Tiền mặt' :
+                        type === 'cash' ? 'thu mặt' :
                         type === 'card' ? 'Thẻ' : 'Chuyển Khoản Ngân hàng';
     typeInput.value = type;
     const cardTypeContainer = document.getElementById('cardTypeContainer');
@@ -240,7 +245,7 @@ function openEditSourceModal(id, balance, status, type, cardType, cardNumber) {
 
 function openDeleteSourceModal(sourceId, sourceType, sourceName) {
     if (sourceType === 'wallet') {
-        alert("Ví Finly là nguồn tiền mặc định và không thể xóa.");
+        alert("Ví Finly là nguồn thu mặc định và không thể xóa.");
         return;
     }
 

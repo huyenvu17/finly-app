@@ -78,7 +78,7 @@
                                               <span class="badge text-bg-info">Thu nhập</span>
                                           {% endif %}
                                         </td>
-                                        <td>{{ transaction[3] }}</td>
+                                        <td>{{ transaction[3] | int | format_number }}</td>
                                         <td>{{ transaction[4] }}</td>
                                         <td>{{ transaction[5] }}</td>
                                         <td>
@@ -270,13 +270,10 @@
 {% endblock %}
 {% block scripts %}
 <script>
-  function formatNumber(value) {
-    return new Intl.NumberFormat('vi-VN').format(value);
-}
 const categoriesData = {{ categories | tojson | safe }};
 function openEditModal(id, category, type, amount, date, note) {
     document.getElementById('edit_transaction_id').value = id || '';
-    document.getElementById('edit_amount').value = formatNumber(amount) || '';
+    document.getElementById('edit_amount').value = Math.round(amount) || '';
     document.getElementById('edit_date').value = date || '';
     document.getElementById('edit_note').value = note || '';
     document.getElementById('edit_type').value = type || '';

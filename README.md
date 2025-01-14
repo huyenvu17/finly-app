@@ -4,7 +4,7 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
 ## Chức năng
 - Đăng ký/ Đăng nhập
 - Quản lý giao dịch chi tiêu/thu nhập (xem, thêm, xóa, sửa giao dịch)
-- Quản lý nguồn tiền (xem, thêm, xóa, sửa nguồn tiền)
+- Quản lý nguồn thu (xem, thêm, xóa, sửa nguồn thu)
 - Quản lý danh mục (xem, thêm)
 - Quản lý hồ sơ (Cập nhật hồ sơ, thay đổi mật khẩu)
 - Thống kê giao dịch theo phân loại
@@ -44,7 +44,7 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
 4. **Tạo môi trường ảo:**
     ```bash
     python -m venv venv
-    source venv/bin/activate      # Trên Linux/MacOS
+    source venv/bin/activate    # Trên Linux/MacOS
     venv\Scripts\activate       # Trên Windows
     ```
 

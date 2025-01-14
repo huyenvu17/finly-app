@@ -10,7 +10,7 @@
                         <h2>Thống Kê Danh Mục</h2>
                     </div>
                     <div class="col-12 col-sm-6 text-end">
-                        <button type="button" class="btn btn-primary bg-white text-primary fw-bold w-auto"  data-bs-toggle="modal" data-bs-target="#newTransaction"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <button type="button" class="btn btn-primary bg-white text-primary fw-bold w-auto"  data-bs-toggle="modal" data-bs-target="#newCategory"><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.33893 1V4H1.28809V6H4.33893V9H6.37283V6H9.42368V4H6.37283V1H4.33893ZM3.32198 20.007V11H5.35588V19H13.4915V14C13.4915 13.45 13.9491 13 14.5084 13L19.5932 12.999V5H11.4576V3H20.6172C21.1745 3 21.6271 3.456 21.6271 4.002V15L15.5254 20.996L4.34097 21C4.07213 21.0005 3.81402 20.8964 3.62307 20.7103C3.43212 20.5242 3.32387 20.2713 3.32198 20.007ZM18.7501 14.999L15.5254 15V18.169L18.7501 14.999Z" fill="#1230AE"/>
                             </svg>
                             Thêm danh mục</button>
@@ -22,24 +22,26 @@
                   <div class="col-12">
                       <!-- Bộ lọc và tìm kiếm -->
                       <form method="GET" action="{{ url_for('categories_bp.categories') }}" class="mb-4">
-                          <div class="row">
-                              <!-- Ô tìm kiếm -->
-                              <div class="col-md-4">
-                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..." value="{{ search_query }}">
-                              </div>
-                                <!-- Lọc loại giao dịch -->
-                              <div class="col-md-3">
+                        <div class="row">
+                            <!-- Ô tìm kiếm -->
+                            <div class="col-md-4">
+                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm..."
+                                    value="{{ search_query }}">
+                            </div>
+                            <!-- Lọc loại danh mục -->
+                            <div class="col-md-3">
                                 <select name="type" class="form-select">
                                     <option value="">Chọn loại</option>
-                                    <option value="expense" {% if transaction_type == 'expense' %}selected{% endif %}>Chi tiêu</option>
-                                    <option value="income" {% if transaction_type == 'income' %}selected{% endif %}>Thu nhập</option>
+                                    <option value="expense" {% if category_type == 'expense' %}selected{% endif %}>Chi tiêu</option>
+                                    <option value="income" {% if category_type == 'income' %}selected{% endif %}>Thu nhập</option>
                                 </select>
                             </div>
-                              <div class="col-md-2">
-                                  <button type="submit" class="btn btn-primary w-100">Lọc</button>
-                              </div>
-                          </div>
-                      </form>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                            </div>
+                        </div>
+                    </form>
+                    
                       <!-- Bảng giao dịch -->
                       <div class="table-responsive">
                         <table class="table">
@@ -48,24 +50,56 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Tên danh mục</th>
                                     <th scope="col">Loại</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for category in categories %}
-                                    <tr>
-                                        <th scope="row">{{ category[0] }}</th>
-                                        <td>{{ category[1] }}</td>
-                                        <td>
+                              {% if categories %}
+                                  {% for category in categories %}
+                                  <tr>
+                                      <th scope="row">{{ category[0] }}</th>
+                                      <td>{{ category[1] }}</td>
+                                      <td>
                                           {% if category[2] == 'expense' %}
                                               <span class="badge text-bg-primary">Chi tiêu</span>
                                           {% else %}
                                               <span class="badge text-bg-info">Thu nhập</span>
                                           {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
+                                      </td>
+                                      <td>
+                                        <button 
+                                              class="btn btn-primary fw-bold"
+                                              onclick="openEditCategoryModal('{{ category[0] }}', '{{ category[1] }}')">
+                                              Sửa
+                                        </button>
+                                        <button 
+                                            class="btn btn-danger fw-bold"
+                                            onclick="openDeleteCategoryModal('{{ category[0] }}', '{{ category[1] }}')">
+                                            Xóa
+                                        </button>
+                                      </td>
+                                  </tr>
+                                  {% endfor %}
+                              {% else %}
+                                  <tr>
+                                      <td colspan="3" class="text-center">Không tìm thấy danh mục nào.</td>
+                                  </tr>
+                              {% endif %}
+                          </tbody>
                         </table>
+                        <nav aria-label="Pagination">
+                          <ul class="pagination justify-content-center">
+                              {% for page in range(1, total_pages + 1) %}
+                              <li class="page-item {% if page == current_page %}active{% endif %}">
+                                  <a class="page-link"
+                                     href="{{ url_for('categories_bp.categories', page=page, search=search_query, type=category_type) }}">
+                                      {{ page }}
+                                  </a>
+                              </li>
+                              {% endfor %}
+                          </ul>
+                      </nav>
+                      
                       </div>
                       
                   </div>
@@ -74,15 +108,15 @@
         </div>
     </div>
   </div>
-  <div class="modal fade" id="newTransaction" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newTransactionLabel" aria-hidden="true">
+  <div class="modal fade" id="newCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newCategoryLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="newTransactionLabel">Ghi Chép Giao Dịch</h1>
+          <h1 class="modal-title fs-5" id="newCategoryLabel">Thêm Danh Mục</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form class="my-3" action="{{ url_for('categories_bp.add_category') }}" method="POST">
+            <form class="mb-3" action="{{ url_for('categories_bp.add_category') }}" method="POST">
                 <div class="mb-3">
                   <label for="cateName" class="form-label">Tên danh mục</label>
                   <input type="text" class="form-control" id="cateName" name="cateName" required>
@@ -101,6 +135,66 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Cập nhật danh mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm" method="POST" action="{{ url_for('categories_bp.update_category') }}">
+                    <input type="hidden" name="category_id" id="edit_category_id">
+                    <div class="mb-3">
+                        <label for="edit_category_name" class="form-label">Tên danh mục</label>
+                        <input type="text" class="form-control" id="edit_category_name" name="category_name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Xác nhận xóa danh mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa danh mục <span id="deleteCategoryName"></span>?</p>
+                <div class="modal-footer">
+                  <form id="deleteCategoryForm" method="POST" action="{{ url_for('categories_bp.delete_category') }}">
+                    <input type="hidden" name="category_id" id="delete_category_id">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block scripts %}
+<script>
+  function openEditCategoryModal(categoryId, categoryName) {
+    document.getElementById('edit_category_id').value = categoryId;
+    document.getElementById('edit_category_name').value = categoryName;
+
+    // Hiển thị modal
+    const editCategoryModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+    editCategoryModal.show();
+}
+  function openDeleteCategoryModal(categoryId, categoryName) {
+    document.getElementById('delete_category_id').value = categoryId;
+    document.getElementById('deleteCategoryName').textContent = categoryName;
+
+    // Hiển thị modal
+    const deleteCategoryModal = new bootstrap.Modal(document.getElementById('deleteCategoryModal'));
+    deleteCategoryModal.show();
+}
+</script>
 {% endblock%}

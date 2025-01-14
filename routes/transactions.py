@@ -14,7 +14,7 @@ def transactions():
     # Lấy các tham số lọc và tìm kiếm từ request
     category = request.args.get('category')
     transaction_type = request.args.get('type')
-    search_query = request.args.get('search')
+    search_query = request.args.get('search') or ''
     page = int(request.args.get('page', 1))
     items_per_page = 10
 
@@ -113,7 +113,7 @@ def add_transaction():
         mysql.connection.commit()
         cur.close()
 
-        flash("Giao dịch đã được thêm thành công!", "success")
+        flash("Giao dịch đã được thêm thành công!", "info")
     except Exception as e:
         flash(f"Đã xảy ra lỗi: {e}", "danger")
 
@@ -139,7 +139,7 @@ def update_transaction():
             WHERE ID = %s AND NGUOIDUNG_ID = %s
         """, (amount, date, note, type, category, transaction_id, current_user.id))
         mysql.connection.commit()
-        flash("Giao dịch đã được cập nhật thành công!", "success")
+        flash("Giao dịch đã được cập nhật thành công!", "info")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
     finally:

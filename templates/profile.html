@@ -1,8 +1,8 @@
-{% extends 'layout.html'%}
+{% extends 'layout.html' %}
 {% block content %}
 <div class="app-container">
-    <div class="postion-relative">
-        <div class="bg-primary app-container-background position-absolute right-0 left-0 w-100 "></div>
+    <div class="position-relative">
+        <div class="bg-primary app-container-background position-absolute right-0 left-0 w-100"></div>
         <div class="position-relative w-100 pt-5">
             <div class="container app-user-info">
                 <div class="row">
@@ -12,53 +12,67 @@
                 </div>
             </div>
             <div class="container bg-light app-content mt-3">
-              <div class="row">
-                  <div class="col-12">
-                    <div class="section-heading">Hồ Sơ</div>
-                    <form method="GET" action="" class="mb-4">
-                      <div class="row">
-                          <div class="col-12 mt-2">
-                              <input type="text" name="username" class="form-control" placeholder="username" value="username">
-                          </div>
-                          <div class="col-12 mt-3">
-                              <input type="text" name="search" class="form-control" placeholder="Họ Tên" value="{{ current_user.hoten }}">
-                          </div>
-                          <div class="col-12 mt-3">
-                              <input type="email" name="email" class="form-control" placeholder="email" value="email">
-                          </div>
-                          <div class="col-12 col-md-3 mt-3">
-                              <button type="submit" class="btn btn-primary w-100">Cập Nhật</button>
-                          </div>
-                        </div>
-                    </form>
-                  </div>
-              </div>
-              <br/>
-              <div class="row">
-                <div class="col-12">
-                  <div class="section-heading">Cập Nhật Mật Khẩu</div>
-                  <form method="GET" action="" class="mb-4">
-                    <div class="row">
-                        <div class="col-12 mt-3">
-                            <input type="password" name="current-password" class="form-control" placeholder="current-password">
-                        </div>
-                        <div class="col-12 mt-3">
-                            <input type="password" name="new-password" class="form-control" placeholder="new-password">
-                        </div>
-                        <div class="col-12 mt-3">
-                            <input type="password" name="confirm-password" class="form-control" placeholder="confirm-password">
-                        </div>
-                        <div class="col-12 col-md-3 mt-3">
-                            <button type="submit" class="btn btn-primary w-100">Đổi Mật Khẩu</button>
-                        </div>
-                      </div>
-                  </form>
+                <!-- Profile Update Section -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-heading">Cập Nhật Thông Tin Tài Khoản</div>
+                        <form method="POST" action="{{ url_for('profile_bp.update_profile') }}" class="mb-4">
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <label for="username" class="form-label">Tài khoản</label>
+                                    <input type="text" name="username" id="username" class="form-control"
+                                        placeholder="Tên đăng nhập" value="{{ current_user.username }}" required>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="full_name" class="form-label">Họ và Tên</label>
+                                    <input type="text" name="full_name" id="full_name" class="form-control"
+                                        placeholder="Họ và Tên" value="{{ current_user.hoten }}" required>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" id="email" class="form-control" value="{{ current_user.email }}"
+                                        disabled>
+                                </div>
+                                <div class="col-12 col-md-3 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100">Cập Nhật</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Password Update Section -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-heading">Cập Nhật Mật Khẩu</div>
+                        <form method="POST" action="{{ url_for('profile_bp.update_password') }}" class="mb-4">
+                            <div class="row">
+                                <div class="col-12 mt-3">
+                                    <label for="current_password" class="form-label">Mật khẩu hiện tại</label>
+                                    <input type="password" name="current_password" id="current_password"
+                                        class="form-control" placeholder="Mật khẩu hiện tại" required>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="new_password" class="form-label">Mật khẩu mới</label>
+                                    <input type="password" name="new_password" id="new_password" class="form-control"
+                                        placeholder="Mật khẩu mới" required>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="confirm_password" class="form-label">Xác nhận mật khẩu mới</label>
+                                    <input type="password" name="confirm_password" id="confirm_password"
+                                        class="form-control" placeholder="Xác nhận mật khẩu mới" required>
+                                </div>
+                                <div class="col-12 col-md-3 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100">Đổi Mật Khẩu</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-          </div>
         </div>
-    </div>    
+    </div>
 </div>
 {% endblock %}
-{% block scripts %}
-{% endblock%}

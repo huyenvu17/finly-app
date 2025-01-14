@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app 
+from flask import Blueprint, render_template, request 
 from flask_login import current_user, login_required
 from helpers.helpers import get_source_title
 from flask_mysqldb import MySQL

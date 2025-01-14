@@ -8,6 +8,7 @@ mysql = MySQL()
 
 sources_bp = Blueprint('sources_bp', __name__)
 
+# sources
 @sources_bp.route('/sources')
 @login_required
 def sources():
@@ -44,10 +45,10 @@ def add_source():
     source_type = request.form.get('type')
     card_type = request.form.get('card_type') if source_type == 'card' else None
     card_number = request.form.get('sothe') if source_type == 'card' else None
-    balance = float(request.form.get('balance', 0))
+    balance = request.form.get('balance') or 0
     status = request.form.get('status', 1) 
 
-    # Lấy danh sách nguồn tiền hiện tại của người dùng
+    # Lấy danh sách nguồn thu hiện tại của người dùng
     cur = mysql.connection.cursor()
     cur.execute("""
         SELECT type, card_type, sothe 
@@ -60,7 +61,7 @@ def add_source():
     if source_type in ['wallet', 'cash', 'bank']:
         for src in existing_sources:
             if src[0] == source_type:
-                flash(f"Loại nguồn tiền '{get_source_title(source_type)}' đã tồn tại!", "danger")
+                flash(f"Loại nguồn thu '{get_source_title(source_type)}' đã tồn tại!", "danger")
                 return redirect(url_for('sources_bp.sources'))
 
     # Kiểm tra logic cho thẻ
@@ -77,7 +78,7 @@ def add_source():
             VALUES (%s, %s, %s, %s, %s, %s)
         """, (current_user.id, source_type, card_type, card_number,balance, status))
         mysql.connection.commit()
-        flash("Nguồn tiền đã được thêm thành công!", "info")
+        flash("Nguồn thu đã được thêm thành công!", "info")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
     finally:
@@ -90,7 +91,7 @@ def add_source():
 @login_required
 def update_source():
     source_id = request.form.get('source_id')
-    new_balance = request.form.get('balance')
+    new_balance = request.form.get('balance') or 0
     new_status = request.form.get('status')
     card_type = request.form.get('card_type')
     card_number = request.form.get('sothe')
@@ -111,7 +112,7 @@ def update_source():
                 WHERE ID = %s AND NGUOIDUNG_ID = %s
             """, (new_balance, new_status, source_id, current_user.id))
         mysql.connection.commit()
-        flash("Nguồn tiền đã được cập nhật thành công!", "info")
+        flash("Nguồn thu đã được cập nhật thành công!", "info")
     except Exception as e:
         flash(f"Có lỗi xảy ra: {e}", "danger")
     finally:
@@ -125,24 +126,24 @@ def update_source():
 def delete_source():
     source_id = request.args.get('source_id')
 
-    # Lấy thông tin nguồn tiền để kiểm tra
+    # Lấy thông tin nguồn thu để kiểm tra
     connection = mysql.connection.cursor()
     connection.execute("SELECT TYPE FROM nguonthu WHERE ID = %s AND NGUOIDUNG_ID = %s", (source_id, current_user.id))
     source = connection.fetchone()
 
     if not source:
-        flash("Nguồn tiền không tồn tại hoặc bạn không có quyền truy cập.", "danger")
+        flash("Nguồn thu không tồn tại hoặc bạn không có quyền truy cập.", "danger")
         return redirect(url_for('sources_bp.sources'))
 
     if source[0] == 'wallet':  # Không xóa được Ví Finly
-        flash("Không thể xóa Ví Finly (nguồn tiền mặc định).", "danger")
+        flash("Không thể xóa Ví Finly (nguồn thu mặc định).", "danger")
         return redirect(url_for('sources_bp.sources'))
 
-    # Xóa nguồn tiền
+    # Xóa nguồn thu
     try:
         connection.execute("DELETE FROM nguonthu WHERE ID = %s AND NGUOIDUNG_ID = %s", (source_id, current_user.id))
         mysql.connection.commit()
-        flash("Nguồn tiền đã được xóa thành công.", "info")
+        flash("Nguồn thu đã được xóa thành công.", "info")
     except Exception as e:
         flash(f"Đã xảy ra lỗi: {e}", "danger")
     finally:

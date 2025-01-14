@@ -55,7 +55,7 @@
               </li>
               <li class="nav-item me-3">
                   <a class="nav-link {% if request.path == url_for('sources_bp.sources') %}active{% endif %}" 
-                     href="{{ url_for('sources_bp.sources') }}">Nguồn Tiền</a>
+                     href="{{ url_for('sources_bp.sources') }}">Nguồn Thu</a>
               </li>
               <li class="nav-item me-3">
                 <a class="nav-link {% if request.path == url_for('categories_bp.categories') %}active{% endif %}" 
@@ -99,7 +99,7 @@
         </div>
         {% block content %}{% endblock %}
     </main>
-    <footer class="bg-light text-center border-top mt-auto">
+    <footer class="bg-light text-center border-top mt-4">
         <div class="container p-4">
             <div class="text-center">
                 <h6 class="text-primary mb-0">Finly 2025 ©. All Rights Reserved.</h6>
