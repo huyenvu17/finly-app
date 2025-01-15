@@ -72,33 +72,119 @@ VALUES
 ((SELECT ID FROM NGUOIDUNG WHERE USERNAME = 'minhvule'), 'wallet', NULL, NULL, 0, 1);
 
 
--- 20 giao dịch trong năm 2024
+-- Thêm giao dịch chi tiêu và thu nhập cho năm 2024
 INSERT INTO GIAODICH (NGUOIDUNG_ID, NGUONTHU_ID, DANHMUC_ID, type, SOTIEN, date, MOTA)
 VALUES
--- Giao dịch chi tiêu
-(1, 1, 1, 'expense', 150000, '2024-01-05', 'Thanh toán tiền điện'),
-(1, 1, 2, 'expense', 200000, '2024-02-10', 'Mua thực phẩm'),
-(1, 1, 3, 'expense', 250000, '2024-03-15', 'Mua sắm đầu tháng'),
-(1, 1, 4, 'expense', 120000, '2024-04-20', 'Giải trí cuối tuần'),
-(1, 1, 5, 'expense', 180000, '2024-05-25', 'Đầu tư nhỏ lẻ'),
-(1, 1, 6, 'expense', 150000, '2024-06-12', 'Đóng học phí kỳ 1'),
-(1, 1, 1, 'expense', 300000, '2024-07-05', 'Thanh toán tiền nước'),
-(1, 1, 2, 'expense', 250000, '2024-08-10', 'Mua thực phẩm cuối tuần'),
-(1, 1, 3, 'expense', 400000, '2024-09-15', 'Mua đồ gia dụng'),
-(1, 1, 4, 'expense', 210000, '2024-10-01', 'Vé xem phim cho cả nhà'),
--- Giao dịch thu nhập
-(1, 1, 7, 'income', 5000000, '2024-01-07', 'Lương tháng 1'),
-(1, 1, 8, 'income', 350000, '2024-02-14', 'Trợ cấp từ gia đình'),
-(1, 1, 9, 'income', 1200000, '2024-03-19', 'Thưởng quý 1'),
-(1, 1, 10, 'income', 200000, '2024-04-25', 'Thu hồi nợ từ bạn bè'),
-(1, 1, 7, 'income', 5500000, '2024-05-07', 'Lương tháng 5'),
-(1, 1, 8, 'income', 400000, '2024-06-01', 'Trợ cấp cho gia đình'),
-(1, 1, 9, 'income', 1200000, '2024-07-10', 'Thưởng giữa năm'),
-(1, 1, 10, 'income', 250000, '2024-08-25', 'Thu hồi nợ từ đồng nghiệp'),
-(1, 1, 7, 'income', 5000000, '2024-09-07', 'Lương tháng 9'),
-(1, 1, 8, 'income', 350000, '2024-10-25', 'Trợ cấp tháng 10');
+-- Tháng 1
+(1, 1, 1, 'expense', 8000000, '2024-01-05', 'Thanh toán tiền điện'),
+(1, 1, 2, 'expense', 4000000, '2024-01-10', 'Mua thực phẩm hàng ngày'),
+(1, 1, 3, 'expense', 3000000, '2024-01-15', 'Mua đồ gia dụng'),
+(1, 1, 4, 'expense', 2000000, '2024-01-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 9000000, '2024-01-07', 'Lương tháng 1'),
+(1, 1, 8, 'income', 4000000, '2024-01-14', 'Trợ cấp gia đình'),
+(1, 1, 9, 'income', 3000000, '2024-01-25', 'Thưởng quý 1'),
 
--- 5 giao dịch trong tháng 1 năm 2025
+-- Tháng 2
+(1, 1, 1, 'expense', 7000000, '2024-02-05', 'Hóa đơn tiền nước'),
+(1, 1, 2, 'expense', 5000000, '2024-02-10', 'Mua thực phẩm cuối tuần'),
+(1, 1, 3, 'expense', 3000000, '2024-02-15', 'Mua quần áo mới'),
+(1, 1, 4, 'expense', 2000000, '2024-02-20', 'Xem phim cuối tuần'),
+(1, 1, 7, 'income', 8000000, '2024-02-07', 'Lương tháng 2'),
+(1, 1, 8, 'income', 4000000, '2024-02-14', 'Trợ cấp tháng 2'),
+(1, 1, 9, 'income', 3000000, '2024-02-25', 'Thưởng lễ'),
+
+-- Tháng 3
+(1, 1, 1, 'expense', 9000000, '2024-03-05', 'Tiền điện tháng 3'),
+(1, 1, 2, 'expense', 4000000, '2024-03-10', 'Thực phẩm hàng tuần'),
+(1, 1, 3, 'expense', 3000000, '2024-03-15', 'Mua sắm gia đình'),
+(1, 1, 4, 'expense', 2000000, '2024-03-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 9000000, '2024-03-07', 'Lương tháng 3'),
+(1, 1, 8, 'income', 4000000, '2024-03-14', 'Trợ cấp gia đình'),
+(1, 1, 9, 'income', 3000000, '2024-03-25', 'Thưởng tháng 3'),
+
+-- Tháng 4
+(1, 1, 1, 'expense', 8000000, '2024-04-05', 'Tiền điện tháng 4'),
+(1, 1, 2, 'expense', 5000000, '2024-04-10', 'Mua thực phẩm hàng ngày'),
+(1, 1, 3, 'expense', 4000000, '2024-04-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-04-20', 'Vé xem phim cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-04-07', 'Lương tháng 4'),
+(1, 1, 8, 'income', 5000000, '2024-04-14', 'Hỗ trợ gia đình'),
+(1, 1, 9, 'income', 4000000, '2024-04-25', 'Thưởng lễ'),
+
+-- Tháng 5
+(1, 1, 1, 'expense', 10000000, '2024-05-05', 'Tiền điện tháng 5'),
+(1, 1, 2, 'expense', 4000000, '2024-05-10', 'Mua thực phẩm cuối tháng'),
+(1, 1, 3, 'expense', 5000000, '2024-05-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-05-20', 'Xem phim cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-05-07', 'Lương tháng 5'),
+(1, 1, 8, 'income', 4000000, '2024-05-14', 'Trợ cấp gia đình tháng 5'),
+(1, 1, 9, 'income', 3000000, '2024-05-25', 'Thưởng lễ tháng 5'),
+
+-- Tháng 6
+(1, 1, 1, 'expense', 8000000, '2024-06-05', 'Tiền điện tháng 6'),
+(1, 1, 2, 'expense', 6000000, '2024-06-10', 'Thực phẩm cuối tuần'),
+(1, 1, 3, 'expense', 3000000, '2024-06-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 4000000, '2024-06-20', 'Xem phim cuối tuần'),
+(1, 1, 7, 'income', 9000000, '2024-06-07', 'Lương tháng 6'),
+(1, 1, 8, 'income', 5000000, '2024-06-14', 'Trợ cấp gia đình tháng 6'),
+(1, 1, 9, 'income', 3000000, '2024-06-25', 'Thưởng tháng 6'),
+
+-- Tháng 7
+(1, 1, 1, 'expense', 8000000, '2024-07-05', 'Tiền điện tháng 7'),
+(1, 1, 2, 'expense', 4000000, '2024-07-10', 'Mua thực phẩm hàng tuần'),
+(1, 1, 3, 'expense', 5000000, '2024-07-15', 'Mua đồ gia dụng'),
+(1, 1, 4, 'expense', 2000000, '2024-07-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 9000000, '2024-07-07', 'Lương tháng 7'),
+(1, 1, 8, 'income', 4000000, '2024-07-14', 'Trợ cấp tháng 7'),
+(1, 1, 9, 'income', 3000000, '2024-07-25', 'Thưởng tháng 7'),
+
+-- Tháng 8
+(1, 1, 1, 'expense', 9000000, '2024-08-05', 'Tiền điện tháng 8'),
+(1, 1, 2, 'expense', 4000000, '2024-08-10', 'Mua thực phẩm hàng tuần'),
+(1, 1, 3, 'expense', 3000000, '2024-08-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-08-20', 'Xem phim cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-08-07', 'Lương tháng 8'),
+(1, 1, 8, 'income', 5000000, '2024-08-14', 'Trợ cấp gia đình tháng 8'),
+(1, 1, 9, 'income', 4000000, '2024-08-25', 'Thưởng tháng 8'),
+
+-- Tháng 9
+(1, 1, 1, 'expense', 7000000, '2024-09-05', 'Tiền điện tháng 9'),
+(1, 1, 2, 'expense', 5000000, '2024-09-10', 'Mua thực phẩm hàng ngày'),
+(1, 1, 3, 'expense', 4000000, '2024-09-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-09-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-09-07', 'Lương tháng 9'),
+(1, 1, 8, 'income', 5000000, '2024-09-14', 'Trợ cấp gia đình tháng 9'),
+(1, 1, 9, 'income', 4000000, '2024-09-25', 'Thưởng tháng 9'),
+
+-- Tháng 10
+(1, 1, 1, 'expense', 9000000, '2024-10-05', 'Tiền điện tháng 10'),
+(1, 1, 2, 'expense', 4000000, '2024-10-10', 'Mua thực phẩm cuối tháng'),
+(1, 1, 3, 'expense', 4000000, '2024-10-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-10-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-10-07', 'Lương tháng 10'),
+(1, 1, 8, 'income', 5000000, '2024-10-14', 'Trợ cấp gia đình tháng 10'),
+(1, 1, 9, 'income', 4000000, '2024-10-25', 'Thưởng tháng 10'),
+
+-- Tháng 11
+(1, 1, 1, 'expense', 8000000, '2024-11-05', 'Tiền điện tháng 11'),
+(1, 1, 2, 'expense', 5000000, '2024-11-10', 'Mua thực phẩm cuối tuần'),
+(1, 1, 3, 'expense', 3000000, '2024-11-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 2000000, '2024-11-20', 'Xem phim cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-11-07', 'Lương tháng 11'),
+(1, 1, 8, 'income', 5000000, '2024-11-14', 'Trợ cấp gia đình tháng 11'),
+(1, 1, 9, 'income', 4000000, '2024-11-25', 'Thưởng tháng 11'),
+
+-- Tháng 12
+(1, 1, 1, 'expense', 10000000, '2024-12-05', 'Tiền điện tháng 12'),
+(1, 1, 2, 'expense', 6000000, '2024-12-10', 'Mua thực phẩm cuối tháng'),
+(1, 1, 3, 'expense', 4000000, '2024-12-15', 'Mua đồ gia dụng mới'),
+(1, 1, 4, 'expense', 3000000, '2024-12-20', 'Giải trí cuối tuần'),
+(1, 1, 7, 'income', 10000000, '2024-12-07', 'Lương tháng 12'),
+(1, 1, 8, 'income', 5000000, '2024-12-14', 'Trợ cấp gia đình tháng 12'),
+(1, 1, 9, 'income', 4000000, '2024-12-25', 'Thưởng tháng 12');
+
+
+-- Thêm giao dịch trong tháng 1 năm 2025
 INSERT INTO GIAODICH (NGUOIDUNG_ID, NGUONTHU_ID, DANHMUC_ID, type, SOTIEN, date, MOTA)
 VALUES
 (1, 1, 1, 'expense', 200000, '2025-01-05', 'Thanh toán tiền điện đầu năm'),

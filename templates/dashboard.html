@@ -328,13 +328,15 @@ function filterMonth(monthYear) {
         series: [{
         name: 'Thu Nhập',
         data: incomeMonthlyData
-      }, {
+      }, 
+      {
         name: 'Chi Tiêu',
         data: expenseMonthlyData
       }],
         chart: {
         type: 'bar',
       },
+      colors: ['#79BF24','#FF819F' ],
       dataLabels: {
         enabled: false
       },
