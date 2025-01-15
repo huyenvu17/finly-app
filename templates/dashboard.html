@@ -30,7 +30,7 @@
                   <div class="input-group">
                     <input type="month" class="form-control" id="overviewMonthFilter" 
                     value="{{ selected_month_year }}" 
-                    onchange="filterOverviewByMonth(this.value)">
+                    onchange="filterMonth(this.value)">
                   </div>
                 </div>
               </div>
@@ -155,7 +155,7 @@
             </div>
             <div class="fund-source">
               <div class="row">
-                  <div class="col-10 section-heading">Nguồn Tiền</div>
+                  <div class="col-10 section-heading">Nguồn Thu</div>
                   <div class="col-2 text-end">
                       <a href="{{ url_for('sources_bp.sources') }}">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -304,29 +304,20 @@
 {% endblock %}
 {% block scripts %}
 <script>
-
-function filterOverviewByMonth(monthYear) {
-  if (monthYear) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('month', monthYear); // Định dạng YYYY-MM từ input type="month"
-    window.location.href = url.toString();
-  } else {
-    alert("Vui lòng chọn một tháng hợp lệ!");
-  }
-}
-  function filterYear(year) {
-  const month = '01'; // Mặc định tháng 1 khi đổi năm
+function filterYear(year) {
+  const month = new Date().getMonth() + 1; // Tháng hiện tại
   const url = new URL(window.location.href);
-  url.searchParams.set('month', `${year}-${month.padStart(2, '0')}`);
+  url.searchParams.set('year', year);  // Cập nhật năm
+  url.searchParams.set('month', `${year}-${String(month).padStart(2, '0')}`); // Đồng bộ tháng hiện tại
   window.location.href = url.toString();
 }
 
-function filterMonth(month) {
-  const year = document.getElementById('yearFilter').value;
+function filterMonth(monthYear) {
   const url = new URL(window.location.href);
-  url.searchParams.set('month', `${year}-${month.padStart(2, '0')}`);
+  url.searchParams.set('month', monthYear); // Cập nhật tháng và năm
   window.location.href = url.toString();
 }
+
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }

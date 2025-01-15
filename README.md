@@ -3,13 +3,23 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
 
 ## Chức năng
 - Đăng ký/ Đăng nhập
-- Quản lý giao dịch chi tiêu/thu nhập (xem, thêm, xóa, sửa giao dịch)
-- Quản lý nguồn thu (xem, thêm, xóa, sửa nguồn thu)
-- Quản lý danh mục (xem, thêm)
-- Quản lý hồ sơ (Cập nhật hồ sơ, thay đổi mật khẩu)
-- Thống kê giao dịch theo phân loại
-- Thống kê xu hướng chi tiêu
+- Quản lý giao dịch chi tiêu/thu nhập
+- Quản lý nguồn thu
+- Quản lý danh mục
+- Quản lý hồ sơ
+- Thống kê giao dịch theo phân loại theo tháng
+- Thống kê xu hướng chi tiêu theo năm
 - Liên hệ
+
+## Ngôn ngữ sử dung
+- Backend:
+    - Python
+    - Flask
+- Frontend:
+    - HTML, CSS, Javascript
+    - Bootstrap
+- Database:
+    - MySQL
 
 ## Hướng dẫn cài đặt
 
@@ -53,12 +63,17 @@ Finly là ứng dụng quản lý tài chính cá nhân cho phép người dùng
     pip install -r requirements.txt
     ```
 
-6. **Chạy ứng dụng:**
+6. **Cập nhật cấu hình**
+    ```bash
+    Cập nhật thông tin tài khoản MySQL server (MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD) tại /config.py
+    ```
+
+7. **Chạy ứng dụng:**
     ```bash
     python app.py
     ```
 
-7. **Truy cập ứng dụng:**
+8. **Truy cập ứng dụng:**
     ```bash
     Mở trình duyệt và truy cập `http://localhost:5000`.
     ```

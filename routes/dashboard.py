@@ -12,13 +12,13 @@ dashboard_bp = Blueprint('dashboard_bp', __name__)
 @login_required
 def dashboard():
     current_date = datetime.now()
+    default_month_year = f"{current_date.year}-{current_date.month:02d}"  # Mặc định tháng và năm hiện tại
     default_year = current_date.year
 
-    # Lấy năm cho Xu hướng Chi tiêu và tháng cho Tổng quan
-    selected_year_trend = int(request.args.get('year', default_year))
-    default_month_year = f"{current_date.year}-{current_date.month:02d}"  # Mặc định tháng hiện tại
-    selected_month_year = request.args.get('month', default_month_year)  # Giá trị từ input type="month"
-    selected_year, selected_month = map(int, selected_month_year.split('-'))
+    # Lấy giá trị từ request
+    selected_year = int(request.args.get('year', default_year))  # Năm được chọn
+    selected_month_year = request.args.get('month', f"{selected_year}-{current_date.month:02d}")
+    selected_year, selected_month = map(int, selected_month_year.split('-'))  # Tách năm và tháng
 
     connection = mysql.connection.cursor()
   
@@ -75,7 +75,6 @@ def dashboard():
     """, params)
     income_stats = connection.fetchall()
 
-    # chart 
     # Tính tổng tất cả giao dịch chi tiêu
     total_expense_amount = sum(row[1] for row in expense_stats)
 
@@ -100,23 +99,24 @@ def dashboard():
         for row in income_stats
     ]
 
-    # Dữ liệu Xu hướng Chi tiêu
+    # Dữ liệu Xu hướng Chi Tiêu (theo năm)
     connection.execute("""
         SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
         FROM giaodich
         WHERE NGUOIDUNG_ID = %s AND TYPE = 'expense' AND YEAR(date) = %s
         GROUP BY MONTH(date)
         ORDER BY MONTH(date)
-    """, [current_user.id, selected_year_trend])
+    """, [current_user.id, selected_year])
     expense_monthly = {row[0]: row[1] for row in connection.fetchall()}
 
+    # Dữ liệu Xu hướng Thu Nhập (theo năm)
     connection.execute("""
         SELECT MONTH(date) AS month, SUM(SOTIEN) AS total
         FROM giaodich
         WHERE NGUOIDUNG_ID = %s AND TYPE = 'income' AND YEAR(date) = %s
         GROUP BY MONTH(date)
         ORDER BY MONTH(date)
-    """, [current_user.id, selected_year_trend])
+    """, [current_user.id, selected_year])
     income_monthly = {row[0]: row[1] for row in connection.fetchall()}
 
     # Tạo danh sách đầy đủ 12 tháng
@@ -141,8 +141,8 @@ def dashboard():
         username=current_user.username,
         expense_categories=expense_categories,
         income_categories=income_categories,
+        selected_month_year=f"{selected_year}-{selected_month:02d}",
         selected_year=selected_year,
-        selected_month_year=selected_month_year,
         total_expense=total_expense,
         total_income=total_income,
         expense_stats=expense_stats,
