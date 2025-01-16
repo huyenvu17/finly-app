@@ -21,7 +21,7 @@ mysql = MySQL(app)
 # Cấu hình Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "auth_bp.login"
 login_manager.remember_cookie_duration = timedelta(days=7)
 
 
@@ -39,6 +39,10 @@ def load_user(user_id):
 def redirect_authenticated_users():
     if current_user.is_authenticated and request.endpoint in ['login', 'register']:
         return redirect(url_for('dashboard_bp.dashboard'))
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for("auth_bp.login"))
 
 # Khai báo module blueprint
 app.register_blueprint(auth_bp)

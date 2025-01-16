@@ -64,12 +64,12 @@ CREATE TABLE GIAODICH (
 -- Thêm người dùng và nguồn thu mặc định
 INSERT INTO NGUOIDUNG (USERNAME, EMAIL, PASSWORD, HOTEN)
 VALUES
-('minhvule', 'minhvule@gmail.com', '11111', 'Lê Minh Vũ');
+('test', 'test@gmail.com', '$2b$12$3wLTNfEb2YELcpCFchUcFO6sw6bke2ecIEfFhRQxfNZXuWtqL2aFe', 'Alex Nguyễn');
 
 -- Lấy ID người dùng vừa thêm để tạo nguồn thu mặc định
 INSERT INTO NGUONTHU (NGUOIDUNG_ID, type, card_type, SOTHE, SODU, status)
 VALUES
-((SELECT ID FROM NGUOIDUNG WHERE USERNAME = 'minhvule'), 'wallet', NULL, NULL, 0, 1);
+((SELECT ID FROM NGUOIDUNG WHERE USERNAME = 'test'), 'wallet', NULL, NULL, 0, 1);
 
 
 -- Thêm giao dịch chi tiêu và thu nhập cho năm 2024

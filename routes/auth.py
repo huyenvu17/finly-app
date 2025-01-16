@@ -58,7 +58,7 @@ def register():
             mysql.connection.commit()
             connection.close()
 
-            flash("Đăng ký thành công! Hãy đăng nhập.")
+            flash("Đăng ký thành công! Hãy đăng nhập.", "info")
             return redirect(url_for('login'))
         except Exception as e:
             flash(f"Có lỗi xảy ra trong quá trình đăng ký: {e}", "danger")
