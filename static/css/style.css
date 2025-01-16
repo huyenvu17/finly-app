@@ -46,6 +46,7 @@
     border-radius: 10px;
     color: var(--bs-app-primary);
     font-weight: bold;
+    height: 100%;
 }
 
 .overview-item.active {
@@ -123,6 +124,11 @@
 .contact-item .contact-icon svg {
     width: 30px;
     fill: var(--bs-app-primary);
+}
+
+.user-dropdown .dropdown-menu[data-bs-popper] {
+    top: 114%;
+    left: -55px;
 }
 
 @media screen and (max-width: 576px) {
