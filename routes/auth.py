@@ -59,10 +59,10 @@ def register():
             connection.close()
 
             flash("Đăng ký thành công! Hãy đăng nhập.", "info")
-            return redirect(url_for('login'))
+            return redirect(url_for('auth_bp.login'))
         except Exception as e:
             flash(f"Có lỗi xảy ra trong quá trình đăng ký: {e}", "danger")
-            return redirect(url_for('register'))
+            return redirect(url_for('auth_bp.register'))
     return render_template('register.html')
 
 # logout
